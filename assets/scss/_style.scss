@@ -26,6 +26,10 @@
 		margin-bottom: 40px;
 	}
 
+    .ajax-post-loader{
+        position: absolute;
+    }
+
 	/* list style blog */
 	.list{
 		@include headings{

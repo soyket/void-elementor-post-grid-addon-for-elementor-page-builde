@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Void Elementor Post Grid Addon for Elementor Page builder
  * Description: Elementor Post Grid in 5 different style by voidthems for elementor page builder
- * Version:     1.0.6
+ * Version:     1.0.61
  * Author:      VOID THEMES
  * Plugin URI:  http://voidthemes.com/void-elementor-post-grid-plugin/
  * Author URI:  http://voidthemes.com

@@ -56,6 +56,11 @@ Note: This plugin is an addon of Elementor Page Builder (https://wordpress.org/p
 
 Our Void Elementor Post Grid adds a new section in the elementor live page builder named : VOID ELEMENTS. Actually here you will see all widgets developed by us even if the plugins are installed seperately. Now just drag & drop it to your page to work.
 
+= Is it possible to override the template ? =
+
+Yes it is possible by creating new file "wp-content/themes/<your_theme>/plugin-templates/content-<your_disply_type>.php
+
+
 
 == Screenshots ==
 
@@ -69,7 +74,12 @@ Our Void Elementor Post Grid adds a new section in the elementor live page build
 
 
 == Changelog ==
-= 1.0.5 = 
+= 1.0.61 =
+Ajax functionnalities :
+- Possibility to filter posts by taxonomy
+- Dynamic pagination (by Ajax)
+Grid size for different device formats
+= 1.0.5 =
 pagination added
 = 1.0.4 =
 fixed js file missing

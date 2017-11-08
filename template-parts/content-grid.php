@@ -6,12 +6,18 @@
  *
  * @package void
  */
-global $count,$col_no,$col_width,$post_count;
-?>
-	
-	<div class="col-md-<?php echo esc_attr( $col_width );?>">
-		<header class="entry-header">	
-		<?php		
+global $count, $col_no, $col_width, $post_count;
+global $count, $col_desktop, $col_tablet, $col_mobile, $post_count;
+
+
+//ROW : first post
+if($count == 1): ?>
+    <div class="row">
+<?php
+endif;?>
+	<article class="col-md-<?php echo esc_attr( $col_desktop['width'] );?> col-sm-<?php echo esc_attr( $col_tablet['width'] );?> col-xs-<?php echo esc_attr( $col_mobile['width'] );?>">
+		<header class="entry-header">
+		<?php
 			if( has_post_thumbnail()) : ?>
 			<div class="post-img">
 				<a href="<?php echo esc_url( get_permalink() ); ?>">
@@ -25,17 +31,17 @@ global $count,$col_no,$col_width,$post_count;
 				</a>
 			</div><!--.post-img-->
 			<?php endif; ?>
-						
-			<div class="post-info"> 
-				<?php		
+
+			<div class="post-info">
+				<?php
 					the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
 				?>
-				
+
 				<?php
 					if ( 'post' === get_post_type() ) : ?>
 						<div class="entry-meta">
 
-							<?php 
+							<?php
 								void_posted_on();
 								void_entry_header();
 							?>
@@ -43,23 +49,20 @@ global $count,$col_no,$col_width,$post_count;
 						</div><!-- .entry-meta -->
 						<div class="blog-excerpt">
 							<?php the_excerpt(); ?>
-						</div><!--.blog-excerpt-->				
+						</div><!--.blog-excerpt-->
 				<?php endif; ?>
 			</div><!--.post-info-->
-			
-		</header><!-- .entry-header -->		
-	</div><!--.col-md-?-->
 
-	<?php 
-		$last_post = false;
-		if( !empty($post_count) ){
-			if(  $post_count == $count ){
-				$last_post = true;				
-			}
-		}		
-	?>
-	<?php	if( $count%$col_no == 0 || $last_post ) : ?>
-		</div><div class="row">
-		
+		</header><!-- .entry-header -->
+	</article><!--.col-md-?-->
 
-	<?php endif; ?>	
+	<?php
+    if( $count%$col_desktop['no'] == 0 ) :
+        if($post_count == $count): //ROW : last post?>
+            </div>
+        <?php
+        else: //ROW : intermediate post ?>
+		    </div><div class="row">
+	<?php
+        endif;
+    endif;
