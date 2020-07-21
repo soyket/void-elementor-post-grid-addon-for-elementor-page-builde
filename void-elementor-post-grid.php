@@ -44,13 +44,15 @@ add_action( 'plugins_loaded', 'voidgrid_load_elements' );
 
 // display custom admin notice
 function voidgrid_load_elements_notice() { ?>
-
-    <?php if (!did_action( 'elementor/loaded' )  ) : ?>
+    <?php if ( ! did_action( 'elementor/loaded' ) ) : ?>
         <div class="notice notice-warning is-dismissible">
-            <p><?php echo sprintf( __( '<a href="%s"  target="_blank" >Elementor Page Builder</a> must be installed and activated for "Void Elementor Post Grid" to work' ),  'https://wordpress.org/plugins/elementor/'); ?></p>
+            <?php if ( file_exists( WP_PLUGIN_DIR . '/elementor/elementor.php' ) ) : ?>
+                    <p><?php echo sprintf( __( '<a href="%s" class="button button-primary">Active Now</a> <b>Elementor Page Builder</b> must be activated for <b>"Void Elementor Post Grid"</b> to work' ),  wp_nonce_url( 'plugins.php?action=activate&plugin=elementor/elementor.php&plugin_status=all&paged=1', 'activate-plugin_elementor/elementor.php') ); ?></p>
+            <?php else : ?>
+                    <p><?php echo sprintf( __( '<a href="%s" class="button button-primary">Install Now</a> <b>Elementor Page Builder</b> must be installed for <b>"Void Elementor Post Grid"</b> to work' ),  wp_nonce_url( self_admin_url( 'update.php?action=install-plugin&plugin=elementor' ), 'install-plugin_elementor' )); ?></p>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
-
 <?php }
 add_action('admin_notices', 'voidgrid_load_elements_notice');
 
