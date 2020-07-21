@@ -2,27 +2,29 @@
 // voidgrid Shortcodes 
 
 $col_no=$count=$col_width=$post_count='';
-
+global $image_size;
 function voidgrid_sc_post_grid( $atts ) {
     extract( shortcode_atts( array (
          'post_type'  => 'post',
-         'taxonomy_type'  => '',
-         'terms'          => '', 
-         'display_type'  => '1',   
-         'posts' => -1,
-         'posts_per_row' => 2,         
-         'image_style'  => '1',
+         'filter_thumbnail' => 0,
+         'taxonomy_type'    => '',
+         'cat_exclude'      => '', // actually include or exclude both
+         'terms'            => '', 
+         'display_type'     => '1',   
+         'posts'            => -1,
+         'posts_per_row'    =>  2,         
+         'image_style'      => '1',
          'orderby'          => 'date',
          'order'            => 'DESC', 
-         'offset'           => 0,  
-         'sticky_ignore'    => 0,
-         'display_type'       => 'grid',
-         'pagination_yes'     => 1,
-
+         'offset'           =>  0,  
+         'sticky_ignore'    =>  0,
+         'display_type'     => 'grid',
+         'pagination_yes'   =>  1,
+		     'image_size'       =>  ''
     ), $atts ));
 
    
-
+  set_transient('void_grid_image_size', $image_size, '60' );
   global $col_no,$count,$col_width;
   
   $count = 0;         
@@ -65,17 +67,31 @@ function voidgrid_sc_post_grid( $atts ) {
     }         
   if( !empty( $taxonomy_type ) ){
     $tax_query = array(                        
-                        array(
-                                'taxonomy' => $taxonomy_type,
-                                'field'    => 'term_id',
-                                'terms'    => explode( ',', $terms ),
-                              ),
-                        );
+                    array(
+                            'taxonomy' => $taxonomy_type,
+                            'field'    => 'term_id',
+                            'terms'    => explode( ',', $terms ),
+                          ),
+                    );
   }
   else{
     $tax_query = '';
   }
- 
+
+  if($filter_thumbnail){
+    $void_image_condition = array(
+      'meta_query' => array( 
+          array(
+              'key' => '_thumbnail_id',
+              'compare' => $filter_thumbnail,
+            ) 
+        )
+    );
+  }else{
+    $void_image_condition='';
+  }
+
+
   $templates = new Void_Template_Loader;
   
 
@@ -91,7 +107,9 @@ if ( get_query_var('paged') ) {
 
 
     $args = array(
-       'post_type'      => $post_type,         
+       'post_type'      => $post_type,
+       'meta_query'     => $void_image_condition,
+       'cat'            => $cat_exclude,        // actually include or exclude both  
        'post_status'    => 'publish',
        'posts_per_page' => $posts, 
        'paged'          => $paged,   
@@ -107,8 +125,7 @@ $grid_query = new WP_Query( $args );
 
 global $post_count;
 $post_count = $posts;
-
-ob_start(); ?>
+ob_start();  ?>
 
 <div class="content-area void-grid">
   <div class="site-main <?php echo esc_html( $display_type . ' '. $image_style); ?>" >       

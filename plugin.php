@@ -1,9 +1,5 @@
 <?php
 namespace voidgrid;  //main namespace
-
-global $void_post_grid;
-$void_post_grid= array_map('basename', glob(dirname( __FILE__ ) . '/widgets/*.php'));
-
 use voidgrid\Widgets\Void_Post_Grid;   //path define same as class name of the widget
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -86,7 +82,7 @@ class Plugin {
 	 * @access private
 	 */
 	private function includes() {
-		global $void_post_grid;              //include the widgets here
+		$void_post_grid= array_map('basename', glob(dirname( __FILE__ ) . '/widgets/*.php'));
 		require VOID_ELEMENTS_DIR . '/helper/helper.php';
 		foreach($void_post_grid as $key => $value){
    			require VOID_ELEMENTS_DIR . '/widgets/'.$value;

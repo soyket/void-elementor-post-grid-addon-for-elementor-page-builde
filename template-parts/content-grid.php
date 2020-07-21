@@ -16,7 +16,12 @@ global $count,$col_no,$col_width,$post_count;
 			<div class="post-img">
 				<a href="<?php echo esc_url( get_permalink() ); ?>">
 				<?php
-					the_post_thumbnail('full',array(
+					if( get_transient('void_grid_image_size') ){
+						$grid_image_size = get_transient('void_grid_image_size');
+					}else{
+						$grid_image_size = 'full';
+					}
+					the_post_thumbnail( $grid_image_size, array(
 							'class' => 'img-responsive',
 							'alt'	=> get_the_title( get_post_thumbnail_id() )
 							)

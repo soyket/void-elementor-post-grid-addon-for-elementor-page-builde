@@ -1,9 +1,9 @@
 === Void Elementor Post Grid Addon for Elementor Page builder ===
-Contributors: voidthemes
+Contributors: voidthemes,voidcoders
 Tags: page-builder, elementor, grid-builder, list-post, post-grid
 Requires at least: 4.4
-Tested up to: 4.8
-Stable tag: 1.0.6
+Tested up to: 5.3.2
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,10 +12,10 @@ Adds post-grid element to Elementor page builder for generating post grid/list f
 == Description ==
 
 This plugin adds new element / widget to Elementor Page Builder which helps you to showcase your blog posts, custom post type with custom taxonomy in five different styles.
-You are now able to show not only your deafult posts by wordpress but also anything you create as custom post type. (excluding-meta tags/values).Pagination will also be added so user can easily navigate through the posts.
+You are now able to show not only your deafult posts by wordpress but also anything you create as custom post type. (excluding-meta tags/values).Pagination for easily navigating through the posts, Option to enable or disable pagination. See List of features below
 
-For more details :[VOID Elementor Post Grid Demo](http://voidthemes.com/void-elementor-post-grid-plugin/).
-For our other works visit : [VOID Themes](http://voidthemes.com).
+For more details :[VOID Elementor Post Grid Demo](https://voidcoders.com/product/post-grid-add-on-for-elementor-free/).
+For our other works visit : [VOID Themes](http://voidcoders.com).
 [Github](https://github.com/soyket/void-elementor-post-grid).
 
 [youtube http://www.youtube.com/watch?v=VUJbNQQ6S9s]
@@ -39,7 +39,10 @@ Controls:
 6. Order by
 7. 3 image styles for featured images to show up
 8. Sticky control
-9.Pagination
+9. Pagination
+10. Exclude / Include with category ID.
+11. Image Size Select Option
+12. Select to show all post/with only featured image/without featured image only.
 
 Note: This plugin is an addon of Elementor Page Builder (https://wordpress.org/plugins/elementor/) and will only work with Elementor Page Builder installed. And your elementor should be up to date to latest version
 
@@ -66,9 +69,21 @@ Our Void Elementor Post Grid adds a new section in the elementor live page build
 5. /assets/screenshot-5.jpg
 6. /assets/screenshot-6.jpg
 7. /assets/screenshot-7.jpg
+7. /assets/screenshot-8.jpg
 
 
 == Changelog ==
+= 1.0.9 =
+Added option for image size selection
+Improved UI 
+Added Ability to show posts only with featured image or without or all of them
+= 1.0.8 =
+js error fix
+added category exclude, include by id 
+= 1.0.7 =
+css fix
+= 1.0.6 =
+pagination problem on front page fixed
 = 1.0.5 = 
 pagination added
 = 1.0.4 =

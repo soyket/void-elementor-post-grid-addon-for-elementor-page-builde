@@ -30,9 +30,9 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
 		return [ 'void-elements' ];    // category of the widget
 	}
 
-	public function is_reload_preview_required() {
-		return true;   
-	}
+	// public function is_reload_preview_required() {
+	// 	return true;   
+	// }
 
 	public function get_script_depends() {		//load the dependent scripts defined in the voidgrid-elements.php
 		return [ 'void-grid-equal-height-js', 'void-grid-custom-js' ];
@@ -48,18 +48,18 @@ protected function _register_controls() {
 		$this->start_controls_section(
 			'section_content',
 			[
-				'label' => esc_html__( 'Post Grid Setting', 'void' ),   //section name for controler view
+				'label' => esc_html__( 'Post Grid Query', 'void' ),   //section name for controler view
 			]
 		);
 
-		$this->add_control(
-			'refer_wp_org',
-			[
-				'raw' => __( 'For more detail about following filters please refer <a href="https://codex.wordpress.org/Template_Tags/get_posts" target="_blank">here</a>', 'void' ),
-				'type' => Controls_Manager::RAW_HTML,
-				'classes' => 'elementor-descriptor',
-			]
-		);
+        $this->add_control(
+            'refer_wp_org',
+            [
+                'raw' => __( 'For more detail about following filters please refer <a href="https://codex.wordpress.org/Template_Tags/get_posts" target="_blank">here</a>', 'void' ),
+                'type' => Controls_Manager::RAW_HTML,
+                'classes' => 'elementor-descriptor',
+            ]
+        );
         $this->add_control(
             'post_type',
             [
@@ -73,7 +73,10 @@ protected function _register_controls() {
             [
                 'label' => __( 'Select Taxonomy', 'void' ),
                 'type' => Controls_Manager::SELECT2,
-                'options' => '',                               
+                'options' => '', 
+                'condition' => [
+                            'post_type!' =>'',
+                        ],                              
             ]
         );
         
@@ -82,11 +85,129 @@ protected function _register_controls() {
             [
                 'label' => __( 'Select Terms (usually categories/tags) * Must Select Taxonomy First', 'void' ),
                 'type' => Controls_Manager::SELECT2,
+                'label_block' => true,
                 'options' => '',              
                 'multiple' => true,
+                'condition' => [
+                            'taxonomy_type!' =>'',
+                        ], 
             ]
         );
-	   $this->add_control(
+
+        $this->add_control(
+          'cat_exclude',
+          [
+             'label'       => __( 'Include / Exclude With Category ID', 'void' ),
+             'label_block' => true,
+             'type'        => Controls_Manager::TEXT,
+             'description' => __( 'Get post category id and add them here. To Include use the id(s) directly (Example: 1,2,3), To exclude category add a minus sign before the category ID (Example : -1,-44,-3343)', 'void' ),
+             'placeholder' => __( '-1,-2,-33,10,11', 'void' ),
+          ]
+        );
+        $this->add_control(
+            'reffer_category_find',
+            [
+                'raw' => __( 'For finding out your category ID follow <a href="https://voidcoders.com/find-category-id-wordpress/" target="_blank">this</a>', 'void' ),
+                'type' => Controls_Manager::RAW_HTML,
+                'classes' => 'elementor-descriptor',
+            ]
+        );
+
+
+        $this->end_controls_section();
+
+
+		$this->start_controls_section(
+            'section_content2',
+            [
+                'label' => esc_html__( 'Pagination & Setting', 'void' ),   //section name for controler view
+            ]
+        );
+
+        $this->add_control(
+            'posts',     
+            [
+                'label' => esc_html__( 'Post Per Page', 'void' ),
+                'description' => esc_html__( 'Give -1 for all post & No Pagination', 'void' ),
+                'type' => Controls_Manager::NUMBER,
+                'default' => -1,
+            ]
+        );
+
+        $this->add_control(
+                'pagination_yes',
+                [
+                    'label' => esc_html__( 'Pagination Enabled', 'void' ),
+                    'type' => Controls_Manager::SELECT,
+                    'options' => [
+                        1 => 'Yes',
+                        2 => 'No'
+                    ],
+                    'default' => 1,
+                    'condition' => [
+                            'posts!' => -1,
+                        ]
+                ]
+            );
+        $this->add_control(
+            'offset',
+            [
+                'label' => esc_html__( 'Post Offset', 'void' ),
+                'type' => Controls_Manager::NUMBER,
+                'default' => '0'
+            ]
+        );
+
+        $this->add_control(
+            'orderby',
+            [
+                'label' => esc_html__( 'Order By', 'void' ),
+                'type' => Controls_Manager::SELECT,
+                'options' => voidgrid_post_orderby_options(),
+                'default' => 'date',
+
+            ]
+        );
+        
+        $this->add_control(
+            'order',
+            [
+                'label' => esc_html__( 'Post Order', 'void' ),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    'asc' => 'Ascending',
+                    'desc' => 'Descending'
+                ],
+                'default' => 'desc',
+
+            ]
+        );
+
+        $this->add_control(
+            'sticky_ignore',
+            [
+                'label' => esc_html__( 'Sticky Condition', 'void' ),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    '1' => 'Remove Sticky',
+                    '0' => 'Keep Sticky'
+                ],
+
+                'default' => '1',
+            ]
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_content3',
+            [
+                'label' => esc_html__( 'Post Style & Image Settings', 'void' ),   //section name for controler view
+            ]
+        );
+
+
+        $this->add_control(
             'display_type',
             [
                 'label' => esc_html__( 'Choose your desired style', 'void' ),
@@ -120,52 +241,38 @@ protected function _register_controls() {
                 'default' => '2',
             ]
         );
-		$this->add_control(
-			'posts',     
+		
+        
+        $this->add_control(
+            'filter_thumbnail',
+            [
+                'label' => esc_html__( 'Image Condition', 'void' ),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                     0 => esc_html__( 'Show All', 'void' ),
+                    'EXISTS' => esc_html__( 'With Image', 'void' ),
+                    'NOT EXISTS' => esc_html__( 'Without Image', 'void' ),
+                ],
+                'default' => 0,
+
+            ]
+        );
+
+		$this->add_group_control(
+			Group_Control_Image_Size::get_type(),
 			[
-				'label' => esc_html__( 'Post Per Page', 'void' ),
-				'description' => esc_html__( 'Give -1 for all post & No Pagination', 'void' ),
-				'type' => Controls_Manager::NUMBER,
-				'default' => -1,
+				'name' => 'image', // Actually its `image_size`.
+				'default' => 'large',
+				'exclude' => [ 'custom' ],
+                'condition' => [
+                    'filter_thumbnail!' => 'NOT EXISTS',
+                ],
 			]
 		);
-
-        $this->add_control(
-                'pagination_yes',
-                [
-                    'label' => esc_html__( 'Pagination Enabled', 'void' ),
-                    'type' => Controls_Manager::SELECT,
-                    'options' => [
-                        1 => 'Yes',
-                        2 => 'No'
-                    ],
-                    'default' => 1,
-
-                ]
-            );
-        $this->add_control(
-            'offset',
-            [
-                'label' => esc_html__( 'Post Offset', 'void' ),
-                'type' => Controls_Manager::NUMBER,
-                'default' => '0'
-            ]
-        );
-
-    	$this->add_control(
-            'orderby',
-            [
-                'label' => esc_html__( 'Order By', 'void' ),
-                'type' => Controls_Manager::SELECT,
-                'options' => voidgrid_post_orderby_options(),
-                'default' => 'date',
-
-            ]
-        );
         $this->add_control(
             'image_style',
             [
-                'label' => esc_html__('Choose your desired featured image style', 'void'),
+                'label' => esc_html__('Featured Image Style', 'void'),
                 'type'  => Controls_Manager::SELECT2,
                 'options' => [
                     '1' => 'Standard',
@@ -173,35 +280,12 @@ protected function _register_controls() {
                     '3' => 'left bottom rounded'
                 ],
                 'default'   => '1',
-            ]
-        );
-        $this->add_control(
-            'order',
-            [
-                'label' => esc_html__( 'Order', 'void' ),
-                'type' => Controls_Manager::SELECT,
-                'options' => [
-                    'asc' => 'Ascending',
-                    'desc' => 'Descending'
+                'condition' => [
+                    'filter_thumbnail!' => 'NOT EXISTS',
                 ],
-                'default' => 'desc',
-
             ]
         );
-
-        $this->add_control(
-            'sticky_ignore',
-            [
-                'label' => esc_html__( 'Sticky Condition', 'void' ),
-                'type' => Controls_Manager::SELECT,
-                'options' => [
-                    '1' => 'Remove Sticky',
-                    '0' => 'Keep Sticky'
-                ],
-
-                'default' => '1',
-            ]
-        );
+       
       
 		$this->end_controls_section();
 
@@ -453,8 +537,7 @@ protected function _register_controls() {
 
 
 	protected function render() {				//to show on the fontend 
-		$settings = $this->get_settings();
-
+		$settings = $this->get_settings();	
         if( !empty($settings['taxonomy_type'])){
             $terms = get_terms( array(
                 'taxonomy' => $settings['taxonomy_type'],
@@ -474,7 +557,7 @@ protected function _register_controls() {
             $category = '';
         }
 		echo'<div class="elementor-shortcode">';
-            echo do_shortcode('[voidgrid_sc_post_grid post_type="'.$settings['post_type'].'" pagination_yes="'.$settings['pagination_yes'].'" display_type="'.$settings['display_type'].'" posts="'.$settings['posts'].'" posts_per_row="'.$settings['posts_per_row'].'" image_style="'.$settings['image_style'].'" sticky_ignore="'.$settings['sticky_ignore'].'"  orderby="'.$settings['orderby'].'" order="'.$settings['order'].'" offset="'.$settings['offset'].'"  terms="'.$category.'" taxonomy_type="'.$settings['taxonomy_type'].'" ]');    
+            echo do_shortcode('[voidgrid_sc_post_grid filter_thumbnail="'.$settings['filter_thumbnail'].'" cat_exclude="'.$settings['cat_exclude'].'" post_type="'.$settings['post_type'].'" pagination_yes="'.$settings['pagination_yes'].'" display_type="'.$settings['display_type'].'" posts="'.$settings['posts'].'" posts_per_row="'.$settings['posts_per_row'].'" image_style="'.$settings['image_style'].'" sticky_ignore="'.$settings['sticky_ignore'].'"  orderby="'.$settings['orderby'].'" order="'.$settings['order'].'" offset="'.$settings['offset'].'"  terms="'.$category.'" taxonomy_type="'.$settings['taxonomy_type'].'" image_size="'. $settings['image_size'] .'" ]');    
 		echo'</div>';
 	}
 
@@ -482,7 +565,7 @@ protected function _register_controls() {
 
 $current_url=esc_url("//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
-if( strpos( $current_url, 'elementor') == true ){
+if( strpos( $current_url, 'action=elementor') == true ){
     add_action( 'wp_footer', function() {
 
     if ( ! defined( 'ELEMENTOR_VERSION' ) ) {

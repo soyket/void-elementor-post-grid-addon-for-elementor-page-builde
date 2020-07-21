@@ -21,7 +21,12 @@ global $count;
 							)
 						);
 					elseif( has_post_thumbnail()) :
-						the_post_thumbnail('blog-list-post-size',array(
+						if( get_transient('void_grid_image_size') ){
+							$grid_image_size = get_transient('void_grid_image_size');
+						}else{
+							$grid_image_size = 'blog-list-post-size';
+						}
+						the_post_thumbnail( $grid_image_size, array(
 								'class' => 'img-responsive',
 								'alt'	=> get_the_title( get_post_thumbnail_id() )
 							)

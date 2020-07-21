@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: Void Elementor Post Grid Addon for Elementor Page builder
- * Description: Elementor Post Grid in 5 different style by voidthems for elementor page builder
- * Version:     1.0.6
- * Author:      VOID THEMES
- * Plugin URI:  http://voidthemes.com/void-elementor-post-grid-plugin/
- * Author URI:  http://voidthemes.com
- * Text Domain: voidgrid
+ * Description: Elementor Post Grid in 5 different style by voidcoders for elementor page builder
+ * Version:     2.0
+ * Author:      VOID CODERS
+ * Plugin URI:  https://voidcoders.com/product/post-grid-add-on-for-elementor-free/
+ * Author URI:  http://voidcoders.com
+ * Text Domain: void
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
