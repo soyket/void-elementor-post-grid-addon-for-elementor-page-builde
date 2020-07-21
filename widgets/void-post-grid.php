@@ -42,9 +42,9 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
 	 * A list of scripts that the widgets is depended in
 	 * @since 1.3.0
 	 **/
-protected function _register_controls() {
-		
-//start of a control box
+    protected function _register_controls() {
+            
+    //start of a control box
 		$this->start_controls_section(
 			'section_content',
 			[
@@ -576,10 +576,13 @@ if( strpos( $current_url, 'action=elementor') == true ){
     wp_enqueue_script( "void-grid-ajax", plugins_url('assets/js/void-ajax.js', dirname(__FILE__)) , array( 'jquery', 'json2' ) );
  
     // make the ajaxurl var available to the above script
-    wp_localize_script( 'void-grid-ajax', 'void_grid_ajax', array(
-                                                            'ajaxurl'          => admin_url( 'admin-ajax.php' ),
-                                                            'postTypeNonce' => wp_create_nonce( 'voidgrid-post-type-nonce' ),
-                                                            ) 
+    wp_localize_script(
+        'void-grid-ajax',
+        'void_grid_ajax',
+        [
+            'ajaxurl'          => admin_url( 'admin-ajax.php' ),
+            'postTypeNonce' => wp_create_nonce( 'voidgrid-post-type-nonce' ),
+        ] 
     );
 } );
 }
