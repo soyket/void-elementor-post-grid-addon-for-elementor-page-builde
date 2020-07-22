@@ -14,7 +14,7 @@
 					<span class="updated-on">
 						<a href="#">
 							<i class="fas fa-paper-plane"></i>
-							<time class="entry-date updated">December 18, 2017</time>
+							<time class="entry-date updated-at">December 18, 2017</time>
 						</a>
 					</span>
 					<span class="byline"> 
@@ -27,7 +27,7 @@
 						<a href="#">antiquarianism</a>, <a href="#">arrangement</a> 
 					</span>
 					<span class="comments-link">
-						<a href="#">1 Comment<span class="screen-reader-text"> on Hello world!</span></a>
+						<a href="#">1 Comment<span class="void-screen-reader-text"> on Hello world!</span></a>
 					</span>
 				</div><!-- .entry-meta -->
 				<div class="blog-excerpt">
@@ -60,7 +60,7 @@
 					<span class="updated-on">
 						<a href="#">
 							<i class="fas fa-paper-plane"></i>
-							<time class="entry-date updated">December 18, 2017</time>
+							<time class="entry-date updated-at">December 18, 2017</time>
 						</a>
 					</span>
 					<span class="byline"> 
@@ -73,7 +73,7 @@
 						<a href="#">antiquarianism</a>, <a href="#">arrangement</a> 
 					</span>
 					<span class="comments-link">
-						<a href="#">1 Comment<span class="screen-reader-text"> on Hello world!</span></a>
+						<a href="#">1 Comment<span class="void-screen-reader-text"> on Hello world!</span></a>
 					</span>
 				</div><!-- .entry-meta -->
 				<div class="blog-excerpt">
@@ -106,7 +106,7 @@
 					<span class="updated-on">
 						<a href="#">
 							<i class="fas fa-paper-plane"></i>
-							<time class="entry-date updated">December 18, 2017</time>
+							<time class="entry-date updated-at">December 18, 2017</time>
 						</a>
 					</span>
 					<span class="byline"> 
@@ -119,7 +119,7 @@
 						<a href="#">antiquarianism</a>, <a href="#">arrangement</a> 
 					</span>
 					<span class="comments-link">
-						<a href="#">1 Comment<span class="screen-reader-text"> on Hello world!</span></a>
+						<a href="#">1 Comment<span class="void-screen-reader-text"> on Hello world!</span></a>
 					</span>
 				</div><!-- .entry-meta -->
 				<div class="blog-excerpt">
@@ -152,7 +152,7 @@
 					<span class="updated-on">
 						<a href="#">
 							<i class="fas fa-paper-plane"></i>
-							<time class="entry-date updated">December 18, 2017</time>
+							<time class="entry-date updated-at">December 18, 2017</time>
 						</a>
 					</span>
 					<span class="byline"> 
@@ -165,7 +165,7 @@
 						<a href="#">antiquarianism</a>, <a href="#">arrangement</a> 
 					</span>
 					<span class="comments-link">
-						<a href="#">1 Comment<span class="screen-reader-text"> on Hello world!</span></a>
+						<a href="#">1 Comment<span class="void-screen-reader-text"> on Hello world!</span></a>
 					</span>
 				</div><!-- .entry-meta -->
 				<div class="blog-excerpt">
