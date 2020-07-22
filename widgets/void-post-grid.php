@@ -155,7 +155,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         );
         
         $this->add_control(
-            'key',
+            'meta_key',
             [
                 'label' => __( 'Name/Key', 'void_grid' ),
                 'type' => \Elementor\Controls_Manager::TEXT,
@@ -165,7 +165,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
             ]
         );
         $this->add_control(
-            'value',
+            'meta_value',
             [
                 'label' => __( 'Value', 'void_grid' ),
                 'type' => Controls_Manager::TEXT,
@@ -173,12 +173,12 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'label_block' => true,
                 'placeholder' => __( 'i.e. value1, value2', 'void_grid' ),
                 'condition' => [
-                    'key!' =>'',
+                    'meta_key!' =>'',
                 ] 
             ]
         );
         $this->add_control(
-            'compare',
+            'meta_compare',
             [
                 'label' => __( 'Compare(Operator)', 'void_grid' ),
                 'type' => Controls_Manager::TEXT,
@@ -186,7 +186,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'label_block' => true,
                  
                 'condition' => [
-                    'value!' =>'',
+                    'meta_value!' =>'',
                 ] 
             ]
         );
@@ -197,7 +197,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'type' => Controls_Manager::RAW_HTML,
                 'classes' => 'elementor-descriptor',
                 'condition' => [
-                    'value!' =>'',
+                    'meta_value!' =>'',
                 ] 
             ]
         );
@@ -221,6 +221,9 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'raw' => __( 'For finding out your category ID follow <a href="https://voidcoders.com/find-category-id-wordpress/" target="_blank">this</a>', 'void' ),
                 'type' => Controls_Manager::RAW_HTML,
                 'classes' => 'elementor-descriptor',
+                'condition' => [
+                    'post_type' => 'post',
+                ],
             ]
         );
 
@@ -647,148 +650,172 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
 	}
 
 
-	protected function render() {				//to show on the fontend 
+	protected function render() {
+        //to show on the fontend 
         $settings = $this->get_settings();
-        	
-        if( !empty($settings['taxonomy_type'])){
-            $terms = get_terms( array(
-                'taxonomy' => $settings['taxonomy_type'],
-                'hide_empty' => true,
-            ));
-            foreach ( $terms as $term ){
-                $term_id[] = $term -> term_id; 
+
+        $post_type        = isset($settings['post_type'])? $settings['post_type']: '';
+        $filter_thumbnail = isset($settings['filter_thumbnail'])? $settings['filter_thumbnail']: '';
+        $cat_exclude      = isset($settings['cat_exclude'])? $settings['cat_exclude']: ''; // actually include or exclude both
+        $display_type     = isset($settings['display_type'])? $settings['display_type']: '';   
+        $posts            = isset($settings['posts'])? $settings['posts']: '';
+        $posts_per_row    = isset($settings['posts_per_row'])? $settings['posts_per_row']: '';      
+        $image_style      = isset($settings['image_style'])? $settings['image_style']: '';
+        $orderby          = isset($settings['orderby'])? $settings['orderby']: '';
+        $order            = isset($settings['order'])? $settings['order']: '';
+        $offset           = isset($settings['offset'])? $settings['offset']: ''; 
+        $sticky_ignore    = isset($settings['sticky_ignore'])? $settings['sticky_ignore']: '';
+        $display_type     = isset($settings['display_type'])? $settings['display_type']: '';
+        $pagination_yes   = isset($settings['pagination_yes'])? $settings['pagination_yes']: '';
+        $image_size       = isset($settings['image_size'])? $settings['image_size']: '';
+
+        //build variable needed for tax_query
+        if( !empty($settings[ 'tax_fields' ][0]['taxonomy_type']) ){
+    
+            if( !empty($settings[ 'tax_fields_relation' ]) ){
+                $tax_query[ 'relation' ] = $settings[ 'tax_fields_relation' ];
+            }else{
+                $tax_query[ 'relation' ] = 'OR';
             }
+            foreach ($settings[ 'tax_fields' ] as $key => $value) {
+                // remove _id key set by ELEMENTOR CODE
+                unset( $value[ '_id' ] );
+                //as WP_QUERY uses taxonomy key not taxonomy_type
+                $value['taxonomy'] = $value['taxonomy_type'];
+                unset( $value['taxonomy_type'] );
+                //if current post is chosen, get current post terms based on taxonomy chosen
+
+                foreach( $value[ 'terms' ] as $index => $val ){
+                    if( $val == 'current' ){
+                        unset( $value[ 'terms' ][$index] );
+                        $current_post_terms = get_the_terms( get_the_ID(), $value['taxonomy']  );
+                        foreach( $current_post_terms as $index => $term ){
+                            //only push terms array if that term is not actively selected, concetaning with '' to returned ineger term_id into string to be used on in_arry as select returns as array
+                            if( !( in_array( $term->term_id . '', $value['terms'] ) ) ){
+                                array_push( $value['terms'], $term->term_id );
+                            }                       
+                        }
+                    }
+                }
+
+                if(empty($value[ 'terms' ])){
+                    $terms = get_terms( array(
+                        'taxonomy' => $value['taxonomy'],
+                        'hide_empty' => false
+                    ) );
+                    foreach($terms as $term_key => $term_val){
+                        array_push( $value['terms'], $term_val->term_id );
+                    }
+                }
+
+                $tax_query[] = $value;
+            }   
+        }else{
+            $tax_query = '';
         }
-		if(!empty($settings['terms'])){
-				$category = implode (", ", $settings['terms']);             
-		}
-        elseif( !empty($settings['taxonomy_type'])) {
-            $category=implode(", ", $term_id);
+
+        $meta_query = [];
+
+        if(!empty($settings['meta_value']) || !empty($settings['meta_key'])){
+            $meta['key'] = isset($settings['meta_key'])? $settings['meta_key']: '';
+            $meta['value'] = isset($settings['meta_value'])? $settings['meta_value']: '';
+            $meta['compare'] = isset($settings['meta_compare'])? $settings['meta_compare']: '';
+            $meta_query[] = $meta;
         }
-        else{
-            $category = '';
+
+        if($filter_thumbnail){
+            $void_image_condition = [
+                [
+                    'key' => '_thumbnail_id',
+                    'compare' => $filter_thumbnail,
+                ]
+            ];
+        } else {
+            $void_image_condition='';
         }
+
+        $meta_query[] = $void_image_condition;
+
+        set_transient('void_grid_image_size', $image_size, '60' );
+        global $col_no,$count,$col_width;
+        
+        $count = 0;         
+
+        $col_width = ( ($posts_per_row != '') ? (12 / $posts_per_row): 12 );
+        $col_no = ( ($posts_per_row != '') ? $posts_per_row : 1 );
+        
+        // display type handler will be remove after data updater
+        switch ($display_type) {
+            case "1":
+                $display_type = 'grid';
+                break;
+            case "2":
+                $display_type = 'list';
+                break;
+            case "3":
+                $display_type = 'first-post-grid';
+                break;
+            case "4":
+                $display_type = 'first-post-list';
+                break;
+            case "5":
+                $display_type = 'minimal';
+                break;
+            default:
+                $display_type = $display_type;
+        }
+
+        // image style handler will be remove after data updater
+        switch ($image_style) {
+            case '':
+                $image_style = '';
+                break;
+            case '2':
+                $image_style = 'top-left';
+                break;
+            case '3':
+                $image_style = 'top-right';
+                break;
+            default:
+                $image_style = $image_style;
+        }
+    
+        $templates = new \Void_Template_Loader;
+    
+        $grid_query= null;
+    
+        if ( get_query_var('paged') ) {
+            $paged = get_query_var('paged');
+        } elseif ( get_query_var('page') ) { // if is static front page
+            $paged = get_query_var('page');
+        } else {
+            $paged = 1;
+        }
+    
+        $args = [
+            'post_type'      => $post_type,
+            'meta_query'     => $meta_query,
+            'cat'            => $cat_exclude,        // actually include or exclude both  
+            'post_status'    => 'publish',
+            'posts_per_page' => $posts, 
+            'paged'          => $paged,   
+            'tax_query'      => $tax_query,
+            'orderby'        => $orderby,
+            'order'          => $order,   //ASC / DESC
+            'ignore_sticky_posts' => $sticky_ignore,
+            'void_grid_query' => 'yes',
+            'void_set_offset' => $offset,
+        ];
+
+        //var_dump($args);
+    
+        $grid_query = new \WP_Query( $args );
+        
+        global $post_count;
+        $post_count = $posts;
 
         echo'<div class="elementor-shortcode">';
-        
-            $post_type        = isset($settings['post_type'])? $settings['post_type']: '';
-            $filter_thumbnail = isset($settings['filter_thumbnail'])? $settings['filter_thumbnail']: '';
-            $taxonomy_type    = isset($settings['taxonomy_type'])? $settings['taxonomy_type']: '';
-            $cat_exclude      = isset($settings['cat_exclude'])? $settings['cat_exclude']: ''; // actually include or exclude both
-            $terms            = explode( ',', $category );
-            $display_type     = isset($settings['display_type'])? $settings['display_type']: '';   
-            $posts            = isset($settings['posts'])? $settings['posts']: '';
-            $posts_per_row    = isset($settings['posts_per_row'])? $settings['posts_per_row']: '';      
-            $image_style      = isset($settings['image_style'])? $settings['image_style']: '';
-            $orderby          = isset($settings['orderby'])? $settings['orderby']: '';
-            $order            = isset($settings['order'])? $settings['order']: '';
-            $offset           = isset($settings['offset'])? $settings['offset']: ''; 
-            $sticky_ignore    = isset($settings['sticky_ignore'])? $settings['sticky_ignore']: '';
-            $display_type     = isset($settings['display_type'])? $settings['display_type']: '';
-            $pagination_yes   = isset($settings['pagination_yes'])? $settings['pagination_yes']: '';
-            $image_size       = isset($settings['image_size'])? $settings['image_size']: '';
 
-            
-            set_transient('void_grid_image_size', $image_size, '60' );
-            global $col_no,$count,$col_width;
-            
-            $count = 0;         
-
-            $col_width = ( ($posts_per_row != '') ? (12 / $posts_per_row): 12 );
-            $col_no = ( ($posts_per_row != '') ? $posts_per_row : 1 );
-            
-            // display type handler will be remove after data updater
-            switch ($display_type) {
-                case "1":
-                    $display_type = 'grid';
-                    break;
-                case "2":
-                    $display_type = 'list';
-                    break;
-                case "3":
-                    $display_type = 'first-post-grid';
-                    break;
-                case "4":
-                    $display_type = 'first-post-list';
-                    break;
-                case "5":
-                    $display_type = 'minimal';
-                    break;
-                default:
-                    $display_type = $display_type;
-            }
-
-            // image style handler will be remove after data updater
-            switch ($image_style) {
-                case '':
-                    $image_style = '';
-                    break;
-                case '2':
-                    $image_style = 'top-left';
-                    break;
-                case '3':
-                    $image_style = 'top-right';
-                    break;
-                default:
-                    $image_style = $image_style;
-            }
-
-            if( $taxonomy_type != '' ){
-                $tax_query = [
-                    [
-                        'taxonomy' => $taxonomy_type,
-                        'field'    => 'term_id',
-                        'terms'    => $terms ,
-                    ],
-                ];
-            } else {
-                $tax_query = '';
-            }
-        
-            if($filter_thumbnail){
-                $void_image_condition = [
-                    'meta_query' => [
-                        [
-                            'key' => '_thumbnail_id',
-                            'compare' => $filter_thumbnail,
-                        ]
-                    ]
-                ];
-            } else {
-                $void_image_condition='';
-            }
-        
-            $templates = new \Void_Template_Loader;
-        
-            $grid_query= null;
-        
-            if ( get_query_var('paged') ) {
-                $paged = get_query_var('paged');
-            } elseif ( get_query_var('page') ) { // if is static front page
-                $paged = get_query_var('page');
-            } else {
-                $paged = 1;
-            }
-        
-            $args = [
-                'post_type'      => $post_type,
-                'meta_query'     => $void_image_condition,
-                'cat'            => $cat_exclude,        // actually include or exclude both  
-                'post_status'    => 'publish',
-                'posts_per_page' => $posts, 
-                'paged'          => $paged,   
-                'tax_query'      => $tax_query,
-                'orderby'        => $orderby,
-                'order'          => $order,   //ASC / DESC
-                'ignore_sticky_posts' => $sticky_ignore,
-                'void_grid_query' => 'yes',
-                'void_set_offset' => $offset,
-            ];
-        
-            $grid_query = new \WP_Query( $args );
-            
-            global $post_count;
-            $post_count = $posts;
             ?>
             
             <div class="content-area void-grid">

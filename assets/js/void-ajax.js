@@ -19,30 +19,30 @@ jQuery( function( $ ) {
                 postTypeNonce: void_grid_ajax.postTypeNonce,
                 post_type: post_type
             };
-            console.log('get_tax_req data');        
-            console.log(data);        
-            $.post(void_grid_ajax.ajaxurl, data, function(response) {
-                console.log(response);        
-                var taxonomy_name = JSON.parse(response);          
-                $.each(taxonomy_name,function(){
-                    if(this.name == 'post_format'){
-                        return;
-                    }
-                
-                    $('[data-setting="taxonomy_type"]').append('<option value="'+this.name+'">'+this.name+'</option>'); 
+            
+            if(!$.isEmptyObject(post_type)){
+                $.post(void_grid_ajax.ajaxurl, data, function(response) { 
+                    var taxonomy_name = JSON.parse(response);          
+                    $.each(taxonomy_name,function(){
+                        if(this.name == 'post_format'){
+                            return;
+                        }
                     
-                });
-                //set already selected value
-                $('[data-setting="taxonomy_type"]').each( function( index, value ){
-                    $(this).val( model.attributes.settings.attributes.tax_fields.models[index].attributes.taxonomy_type );
-                    void_grid_terms($(this));
-                });
-                if( $('[data-setting="taxonomy_type"]').has('option').length == 0 ) {
-                    $('[data-setting="taxonomy_type"]').attr('disabled', 'disabled');
-                }else{
-                    $('[data-setting="taxonomy_type"]').removeAttr('disabled');
-                }
-            });//$.post                
+                        $('[data-setting="taxonomy_type"]').append('<option value="'+this.name+'">'+this.name+'</option>'); 
+                        
+                    });
+                    //set already selected value
+                    $('[data-setting="taxonomy_type"]').each( function( index, value ){
+                        $(this).val( model.attributes.settings.attributes.tax_fields.models[index].attributes.taxonomy_type );
+                        void_grid_terms($(this));
+                    });
+                    if( $('[data-setting="taxonomy_type"]').has('option').length == 0 ) {
+                        $('[data-setting="taxonomy_type"]').attr('disabled', 'disabled');
+                    }else{
+                        $('[data-setting="taxonomy_type"]').removeAttr('disabled');
+                    }
+                });//$.post                
+            }        
         }//void_grid_get_taxonomy()
 
         //function to get terms based on taxonomy
