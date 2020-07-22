@@ -698,6 +698,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                     }
                 }
 
+                // set all terms on empty term input under the taxonomy
                 if(empty($value[ 'terms' ])){
                     $terms = get_terms( array(
                         'taxonomy' => $value['taxonomy'],
