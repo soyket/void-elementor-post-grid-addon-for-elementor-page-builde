@@ -50,3 +50,50 @@ function void_grid_post_type(){
 	return $post_types;
 }
 
+function void_grid_ajax_process_tax_request() {
+	// first check if data is being sent and that it is the data we want   
+   
+	if( isset( $_POST['postTypeNonce'] ) ){     
+		$nonce = $_POST['postTypeNonce'];
+		if ( ! wp_verify_nonce( $nonce, 'void_grid-post-type-nonce' ) ){
+			wp_die( 'You are not allowed!');
+		}
+		$post_type = $_POST['post_type'];
+		$taxonomoies = get_object_taxonomies( $post_type, 'names' );
+		$taxonomy_name = array();    
+		foreach( $taxonomoies as $taxonomy ){            
+			$taxonomy_name[] = array( 'name'    => $taxonomy ) ;            
+					
+		}
+		echo json_encode($taxonomy_name);
+		wp_die(); 
+	} 
+}
+add_action('wp_ajax_void_grid_ajax_tax', 'void_grid_ajax_process_tax_request');
+
+function void_grid_ajax_process_terms_request() {
+	// first check if data is being sent and that it is the data we want
+   
+	if( isset( $_POST['postTypeNonce'] ) ){     
+		$nonce = $_POST['postTypeNonce'];
+		if ( ! wp_verify_nonce( $nonce, 'void_grid-post-type-nonce' ) ){
+			wp_die( 'You are not allowed!');
+		}
+		$taxonomy_type = $_POST['taxonomy_type'];           
+		$term_slug = array();
+		$terms =  get_terms( array( 'taxonomy' => $taxonomy_type) );
+		foreach ( $terms as $term ){
+			$id = $term->term_id;
+			$name = $term->name;
+			$term_slug[] = array(
+					'id'    => $id,
+					'name'  => $name
+				);              
+		}
+		//to process the current post terms           
+		$term_slug[] = array( 'id' => 'current', 'name' => 'Current Post' );
+		echo json_encode($term_slug);
+		wp_die(); 
+	} 
+}
+add_action('wp_ajax_void_grid_ajax_terms', 'void_grid_ajax_process_terms_request');

@@ -37,7 +37,10 @@ require VOID_ELEMENTS_DIR . 'template-tags.php';
     }
 
     // Require the main plugin file
-    require( __DIR__ . '/plugin.php' );   //loading the main plugin
+    require( __DIR__ . '/plugin.php' );  
+    //loading the main plugin
+    // helper file for this plugin. currently used for gettings all contact form of cf7. also used for ajax request handle
+    require __DIR__ . '/helper/helper.php';
 
 }
 add_action( 'plugins_loaded', 'voidgrid_load_elements' ); 
@@ -56,57 +59,69 @@ function voidgrid_load_elements_notice() { ?>
 <?php }
 add_action('admin_notices', 'voidgrid_load_elements_notice');
 
-
-
 function void_grid_image_size(){
     add_image_size( 'blog-list-post-size', 350 );
 }
 add_action('init', 'void_grid_image_size');
 
-function void_grid_ajax_process_tax_request() {
-    // first check if data is being sent and that it is the data we want   
-   
-    if( isset( $_POST['postTypeNonce'] ) ){     
-        $nonce = $_POST['postTypeNonce'];
-        if ( ! wp_verify_nonce( $nonce, 'voidgrid-post-type-nonce' ) ){
-            wp_die( 'You are not allowed!');
-        }
-        $post_type = $_POST['post_type'];
-        $taxonomoies = get_object_taxonomies( $post_type, 'names' );
-        $taxonomy_name = array();    
-        foreach( $taxonomoies as $taxonomy ){            
-            $taxonomy_name[] = array( 'name'    => $taxonomy ) ;            
-                    
-        }
-        echo json_encode($taxonomy_name);
-        wp_die(); 
-    } 
-}
-add_action('wp_ajax_void_grid_ajax_tax', 'void_grid_ajax_process_tax_request');
+function void_grid_elementor_js_load() {
 
-function void_grid_ajax_process_terms_request() {
-    // first check if data is being sent and that it is the data we want
-   
-    if( isset( $_POST['postTypeNonce'] ) ){     
-        $nonce = $_POST['postTypeNonce'];
-        if ( ! wp_verify_nonce( $nonce, 'voidgrid-post-type-nonce' ) ){
-            wp_die( 'You are not allowed!');
-        }
-        $taxonomy_type = $_POST['taxonomy_type'];           
-        $term_slug = array();
-        $terms = get_terms( $taxonomy_type );                   
-        foreach ( $terms as $term ){
-            $term_slug[] = array(
-                    'id'    => $term -> term_id,
-                    'name'  => $term -> name
-                );              
-        }           
-    
-        echo json_encode($term_slug);
-        wp_die(); 
-    } 
+    // load our jquery file that sends the $.post request
+    wp_enqueue_script( "void-query-ajax", plugins_url('assets/js/void-ajax.js', VOID_ELEMENTS_FILE_ ) , array( 'jquery', 'json2' ), time(), true );
+
+    // make the ajaxurl var available to the above script
+    wp_localize_script( 'void-query-ajax', 'void_grid_ajax', array(
+        'ajaxurl'          => admin_url( 'admin-ajax.php' ),
+        'postTypeNonce' => wp_create_nonce( 'void_grid-post-type-nonce' ),
+        ) 
+    );
 }
-add_action('wp_ajax_void_grid_ajax_terms', 'void_grid_ajax_process_terms_request');
+add_action( 'elementor/editor/after_enqueue_scripts', 'void_grid_elementor_js_load');
+
+// function void_grid_ajax_process_tax_request() {
+//     // first check if data is being sent and that it is the data we want   
+   
+//     if( isset( $_POST['postTypeNonce'] ) ){     
+//         $nonce = $_POST['postTypeNonce'];
+//         if ( ! wp_verify_nonce( $nonce, 'voidgrid-post-type-nonce' ) ){
+//             wp_die( 'You are not allowed!');
+//         }
+//         $post_type = $_POST['post_type'];
+//         $taxonomoies = get_object_taxonomies( $post_type, 'names' );
+//         $taxonomy_name = array();    
+//         foreach( $taxonomoies as $taxonomy ){            
+//             $taxonomy_name[] = array( 'name'    => $taxonomy ) ;            
+                    
+//         }
+//         echo json_encode($taxonomy_name);
+//         wp_die(); 
+//     } 
+// }
+// add_action('wp_ajax_void_grid_ajax_tax', 'void_grid_ajax_process_tax_request');
+
+// function void_grid_ajax_process_terms_request() {
+//     // first check if data is being sent and that it is the data we want
+   
+//     if( isset( $_POST['postTypeNonce'] ) ){     
+//         $nonce = $_POST['postTypeNonce'];
+//         if ( ! wp_verify_nonce( $nonce, 'voidgrid-post-type-nonce' ) ){
+//             wp_die( 'You are not allowed!');
+//         }
+//         $taxonomy_type = $_POST['taxonomy_type'];           
+//         $term_slug = array();
+//         $terms = get_terms( $taxonomy_type );                   
+//         foreach ( $terms as $term ){
+//             $term_slug[] = array(
+//                     'id'    => $term -> term_id,
+//                     'name'  => $term -> name
+//                 );              
+//         }           
+    
+//         echo json_encode($term_slug);
+//         wp_die(); 
+//     } 
+// }
+// add_action('wp_ajax_void_grid_ajax_terms', 'void_grid_ajax_process_terms_request');
 
 // add plugin activation time
 

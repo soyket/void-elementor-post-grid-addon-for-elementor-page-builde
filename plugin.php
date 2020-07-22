@@ -83,7 +83,6 @@ class Plugin {
 	 */
 	private function includes() {
 		$void_post_grid= array_map('basename', glob(dirname( __FILE__ ) . '/widgets/*.php'));
-		require VOID_ELEMENTS_DIR . '/helper/helper.php';
 		foreach($void_post_grid as $key => $value){
    			require VOID_ELEMENTS_DIR . '/widgets/'.$value;
 		}

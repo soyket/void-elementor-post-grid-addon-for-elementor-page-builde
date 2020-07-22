@@ -68,19 +68,19 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'options' => void_grid_post_type(),                                
             ]
         );
-        $this->add_control(
+
+        $repeater = new \Elementor\Repeater();
+
+        $repeater->add_control(
             'taxonomy_type',
             [
                 'label' => __( 'Select Taxonomy', 'void' ),
                 'type' => Controls_Manager::SELECT2,
-                'options' => '', 
-                'condition' => [
-                            'post_type!' =>'',
-                        ],                              
+                'options' => (object) array(),                              
             ]
         );
         
-        $this->add_control(
+        $repeater->add_control(
             'terms',
             [
                 'label' => __( 'Select Terms (usually categories/tags) * Must Select Taxonomy First', 'void' ),
@@ -94,15 +94,126 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
             ]
         );
 
+        $repeater->add_control(
+            'compare',
+            [
+                'label' => __( 'Compare(Operator)', 'void_grid' ),
+                'type' => Controls_Manager::TEXT,
+                'default' => 'IN',
+                'label_block' => true,
+            ]
+        );
+        $repeater->add_control(
+            'reffer_compare',
+            [
+                'raw' => __( 'To know about operator check <a href="https://elequerybuilder.com/operator/" target="_blank">this</a>', 'void_grid' ),
+                'type' => Controls_Manager::RAW_HTML,
+                'classes' => 'elementor-descriptor',
+            ]
+        );
+
+        $this->add_control(
+            'tax_fields',
+            [
+                'label' => __( 'Taxonomy & terms combination', 'void_grid' ),
+                'type' => Controls_Manager::REPEATER,
+                'fields' => $repeater->get_controls(),
+                'label_block' => true,
+                'item_actions' => array('duplicate' => false),
+                'default' => [
+                    [
+                        'taxonomy_type' => '',
+                        'terms' => '',
+                        
+                    ],
+                ],
+                'title_field' => '{{{ taxonomy_type }}}', 
+                          
+            ]
+        );
+
+        $this->add_control(
+            'tax_fields_relation',
+            [
+                'label' => __( 'Fields Relation', 'void_grid' ),
+                'type' => Controls_Manager::SWITCHER,
+                'label_on' => __( 'AND', 'void_grid' ),
+                'label_off' => __( 'OR', 'void_grid' ),
+                'return_value' => 'AND',
+                'default' => 'OR',
+                
+            ]
+        );
+
+        $this->add_control(
+			'meta_query_section',
+			[
+				'label' => __( 'Meta query', 'plugin-name' ),
+				'type' => \Elementor\Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+        );
+        
+        $this->add_control(
+            'key',
+            [
+                'label' => __( 'Name/Key', 'void_grid' ),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'options' => '',
+                'label_block' => true,
+
+            ]
+        );
+        $this->add_control(
+            'value',
+            [
+                'label' => __( 'Value', 'void_grid' ),
+                'type' => Controls_Manager::TEXT,
+                'options' => '',
+                'label_block' => true,
+                'placeholder' => __( 'i.e. value1, value2', 'void_grid' ),
+                'condition' => [
+                    'key!' =>'',
+                ] 
+            ]
+        );
+        $this->add_control(
+            'compare',
+            [
+                'label' => __( 'Compare(Operator)', 'void_grid' ),
+                'type' => Controls_Manager::TEXT,
+                'options' => '',
+                'label_block' => true,
+                 
+                'condition' => [
+                    'value!' =>'',
+                ] 
+            ]
+        );
+        $this->add_control(
+            'reffer_custom_compare',
+            [
+                'raw' => __( 'To know about operator check <a href="https://elequerybuilder.com/operator/" target="_blank">this</a>', 'void_grid' ),
+                'type' => Controls_Manager::RAW_HTML,
+                'classes' => 'elementor-descriptor',
+                'condition' => [
+                    'value!' =>'',
+                ] 
+            ]
+        );
+
         $this->add_control(
           'cat_exclude',
-          [
-             'label'       => __( 'Include / Exclude With Category ID', 'void' ),
-             'label_block' => true,
-             'type'        => Controls_Manager::TEXT,
-             'description' => __( 'Get post category id and add them here. To Include use the id(s) directly (Example: 1,2,3), To exclude category add a minus sign before the category ID (Example : -1,-44,-3343)', 'void' ),
-             'placeholder' => __( '-1,-2,-33,10,11', 'void' ),
-          ]
+            [
+                'label'       => __( 'Include / Exclude With Category ID', 'void' ),
+                'label_block' => true,
+                'type'        => Controls_Manager::TEXT,
+                'description' => __( 'Get post category id and add them here. To Include use the id(s) directly (Example: 1,2,3), To exclude category add a minus sign before the category ID (Example : -1,-44,-3343)', 'void' ),
+                'placeholder' => __( '-1,-2,-33,10,11', 'void' ),
+                'condition' => [
+                    'post_type' => 'post',
+                ],
+            ]
         );
         $this->add_control(
             'reffer_category_find',
@@ -740,29 +851,29 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
 
 }
 
-$current_url=esc_url("//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+// $current_url=esc_url("//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
-if( strpos( $current_url, 'action=elementor') == true ){
-    add_action( 'wp_footer', function() {
+// if( strpos( $current_url, 'action=elementor') == true ){
+//     add_action( 'wp_footer', function() {
 
-    if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
-        return;
-    }
-   
-    // load our jquery file that sends the $.post request
-    wp_enqueue_script( "void-grid-ajax", plugins_url('assets/js/void-ajax.js', dirname(__FILE__)) , array( 'jquery', 'json2' ) );
- 
-    // make the ajaxurl var available to the above script
-    wp_localize_script(
-        'void-grid-ajax',
-        'void_grid_ajax',
-        [
-            'ajaxurl'          => admin_url( 'admin-ajax.php' ),
-            'postTypeNonce' => wp_create_nonce( 'voidgrid-post-type-nonce' ),
-        ] 
-    );
-} );
-}
+//         if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
+//             return;
+//         }
+    
+//         // load our jquery file that sends the $.post request
+//         wp_enqueue_script( "void-grid-ajax", plugins_url('assets/js/void-ajax.js', dirname(__FILE__)) , array( 'jquery', 'json2' ) );
+    
+//         // make the ajaxurl var available to the above script
+//         wp_localize_script(
+//             'void-grid-ajax',
+//             'void_grid_ajax',
+//             [
+//                 'ajaxurl'          => admin_url( 'admin-ajax.php' ),
+//                 'postTypeNonce' => wp_create_nonce( 'voidgrid-post-type-nonce' ),
+//             ] 
+//         );
+//     } );
+// }
 
 
 
