@@ -13,6 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 //require( __DIR__ . '/void-shortcode.php' );   //loading the main plugin
 
+define('VOID_GRID_VERSION', '1.1.0');
+define('VOID_GRID_PLUGIN_URL', trailingslashit(plugin_dir_url( __FILE__ )));
+define('VOID_GRID_PLUGIN_DIR', trailingslashit(plugin_dir_path( __FILE__ )));
+
 define( 'VOID_ELEMENTS_FILE_', __FILE__ );
 define( 'VOID_ELEMENTS_DIR', plugin_dir_path( __FILE__ ) );
 
@@ -39,7 +43,7 @@ require VOID_ELEMENTS_DIR . 'template-tags.php';
     // Require the main plugin file
     require( __DIR__ . '/plugin.php' );  
     //loading the main plugin
-    // helper file for this plugin. currently used for gettings all contact form of cf7. also used for ajax request handle
+    // helper file for this plugin. currently used for gettings all post type. also used for ajax request handle
     require __DIR__ . '/helper/helper.php';
 
 }
@@ -77,51 +81,6 @@ function void_grid_elementor_js_load() {
     );
 }
 add_action( 'elementor/editor/after_enqueue_scripts', 'void_grid_elementor_js_load');
-
-// function void_grid_ajax_process_tax_request() {
-//     // first check if data is being sent and that it is the data we want   
-   
-//     if( isset( $_POST['postTypeNonce'] ) ){     
-//         $nonce = $_POST['postTypeNonce'];
-//         if ( ! wp_verify_nonce( $nonce, 'voidgrid-post-type-nonce' ) ){
-//             wp_die( 'You are not allowed!');
-//         }
-//         $post_type = $_POST['post_type'];
-//         $taxonomoies = get_object_taxonomies( $post_type, 'names' );
-//         $taxonomy_name = array();    
-//         foreach( $taxonomoies as $taxonomy ){            
-//             $taxonomy_name[] = array( 'name'    => $taxonomy ) ;            
-                    
-//         }
-//         echo json_encode($taxonomy_name);
-//         wp_die(); 
-//     } 
-// }
-// add_action('wp_ajax_void_grid_ajax_tax', 'void_grid_ajax_process_tax_request');
-
-// function void_grid_ajax_process_terms_request() {
-//     // first check if data is being sent and that it is the data we want
-   
-//     if( isset( $_POST['postTypeNonce'] ) ){     
-//         $nonce = $_POST['postTypeNonce'];
-//         if ( ! wp_verify_nonce( $nonce, 'voidgrid-post-type-nonce' ) ){
-//             wp_die( 'You are not allowed!');
-//         }
-//         $taxonomy_type = $_POST['taxonomy_type'];           
-//         $term_slug = array();
-//         $terms = get_terms( $taxonomy_type );                   
-//         foreach ( $terms as $term ){
-//             $term_slug[] = array(
-//                     'id'    => $term -> term_id,
-//                     'name'  => $term -> name
-//                 );              
-//         }           
-    
-//         echo json_encode($term_slug);
-//         wp_die(); 
-//     } 
-// }
-// add_action('wp_ajax_void_grid_ajax_terms', 'void_grid_ajax_process_terms_request');
 
 // add plugin activation time
 

@@ -1,7 +1,5 @@
 jQuery( function( $ ) {
-    console.log('loaded');
     elementor.hooks.addAction( 'panel/open_editor/widget/void-post-grid', function( panel, model, view ) {
-        console.log('open editor hook fired.');
         //call initially to set the already saved data
         void_grid_get_taxonomy();
        
@@ -19,7 +17,7 @@ jQuery( function( $ ) {
                 postTypeNonce: void_grid_ajax.postTypeNonce,
                 post_type: post_type
             };
-            
+
             if(!$.isEmptyObject(post_type)){
                 $.post(void_grid_ajax.ajaxurl, data, function(response) { 
                     var taxonomy_name = JSON.parse(response);          
@@ -68,11 +66,8 @@ jQuery( function( $ ) {
                 action: 'void_grid_ajax_terms',
                 postTypeNonce : void_grid_ajax.postTypeNonce,
                 taxonomy_type: taxonomy_type
-            };
-            console.log('get_term_req data');        
-            console.log(data);      
-            $.post(void_grid_ajax.ajaxurl, data, function(response) {
-                console.log(response);        
+            };      
+            $.post(void_grid_ajax.ajaxurl, data, function(response) {    
                 var terms = JSON.parse(response);                 
                 $.each( terms,function( idx, value ){                    
                     onload.closest('.elementor-repeater-row-controls').find('[data-setting="terms"]').append('<option value="'+this.id+'">'+this.name+'</option>');

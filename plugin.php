@@ -52,12 +52,14 @@ class Plugin {
 		add_action( 'elementor/widgets/widgets_registered', [ $this, 'on_widgets_registered' ] );
 
 		add_action( 'elementor/frontend/after_register_scripts', function() {		
-			wp_enqueue_style( 'void-grid-main', plugins_url ( '/assets/css/main.css', VOID_ELEMENTS_FILE_ ),false,'1.0','all');
+			wp_enqueue_style( 'void-grid-main', plugins_url ( '/assets/css/main.css', VOID_ELEMENTS_FILE_ ),false, VOID_GRID_VERSION,'all');
 			wp_enqueue_style( 'void-grid-bootstrap', plugins_url ( '/assets/css/bootstrap.min.css', VOID_ELEMENTS_FILE_ ),false,'3.3.7','all');
 			//load equal height js
 			wp_enqueue_script( 'void-grid-equal-height-js', plugins_url ( '/assets/js/jquery.matchHeight-min.js', VOID_ELEMENTS_FILE_ ), array(), '3.3.7', true );
 			//load custom js
-			wp_enqueue_script( 'void-grid-custom-js', plugins_url ( '/assets/js/custom.js', VOID_ELEMENTS_FILE_ ), array(), '1.0', true );
+			wp_enqueue_script( 'shuffle-min', plugins_url ( '/assets/js/shuffle.min.js', VOID_ELEMENTS_FILE_ ), array(), VOID_GRID_VERSION, true );
+			wp_enqueue_script( 'void-grid-custom-js', plugins_url ( '/assets/js/custom.js', VOID_ELEMENTS_FILE_ ), array(), VOID_GRID_VERSION, true );
+			wp_enqueue_script( 'void-grid-plugin', plugins_url ( '/assets/js/plugin.js', VOID_ELEMENTS_FILE_ ), array(), VOID_GRID_VERSION, true );
 		} );
 
 	}

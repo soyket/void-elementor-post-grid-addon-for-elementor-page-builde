@@ -97,7 +97,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $repeater->add_control(
             'compare',
             [
-                'label' => __( 'Compare(Operator)', 'void_grid' ),
+                'label' => __( 'Compare(Operator)', 'void' ),
                 'type' => Controls_Manager::TEXT,
                 'default' => 'IN',
                 'label_block' => true,
@@ -106,7 +106,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $repeater->add_control(
             'reffer_compare',
             [
-                'raw' => __( 'To know about operator check <a href="https://elequerybuilder.com/operator/" target="_blank">this</a>', 'void_grid' ),
+                'raw' => __( 'To know about operator check <a href="https://elequerybuilder.com/operator/" target="_blank">this</a>', 'void' ),
                 'type' => Controls_Manager::RAW_HTML,
                 'classes' => 'elementor-descriptor',
             ]
@@ -115,7 +115,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $this->add_control(
             'tax_fields',
             [
-                'label' => __( 'Taxonomy & terms combination', 'void_grid' ),
+                'label' => __( 'Taxonomy & terms combination', 'void' ),
                 'type' => Controls_Manager::REPEATER,
                 'fields' => $repeater->get_controls(),
                 'label_block' => true,
@@ -135,10 +135,10 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $this->add_control(
             'tax_fields_relation',
             [
-                'label' => __( 'Fields Relation', 'void_grid' ),
+                'label' => __( 'Fields Relation', 'void' ),
                 'type' => Controls_Manager::SWITCHER,
-                'label_on' => __( 'AND', 'void_grid' ),
-                'label_off' => __( 'OR', 'void_grid' ),
+                'label_on' => __( 'AND', 'void' ),
+                'label_off' => __( 'OR', 'void' ),
                 'return_value' => 'AND',
                 'default' => 'OR',
                 
@@ -148,7 +148,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $this->add_control(
 			'meta_query_section',
 			[
-				'label' => __( 'Meta query', 'plugin-name' ),
+				'label' => __( 'Meta query', 'void' ),
 				'type' => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -157,7 +157,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $this->add_control(
             'meta_key',
             [
-                'label' => __( 'Name/Key', 'void_grid' ),
+                'label' => __( 'Name/Key', 'void' ),
                 'type' => \Elementor\Controls_Manager::TEXT,
                 'options' => '',
                 'label_block' => true,
@@ -167,11 +167,11 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $this->add_control(
             'meta_value',
             [
-                'label' => __( 'Value', 'void_grid' ),
+                'label' => __( 'Value', 'void' ),
                 'type' => Controls_Manager::TEXT,
                 'options' => '',
                 'label_block' => true,
-                'placeholder' => __( 'i.e. value1, value2', 'void_grid' ),
+                'placeholder' => __( 'i.e. value1, value2', 'void' ),
                 'condition' => [
                     'meta_key!' =>'',
                 ] 
@@ -180,7 +180,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $this->add_control(
             'meta_compare',
             [
-                'label' => __( 'Compare(Operator)', 'void_grid' ),
+                'label' => __( 'Compare(Operator)', 'void' ),
                 'type' => Controls_Manager::TEXT,
                 'options' => '',
                 'label_block' => true,
@@ -193,7 +193,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $this->add_control(
             'reffer_custom_compare',
             [
-                'raw' => __( 'To know about operator check <a href="https://elequerybuilder.com/operator/" target="_blank">this</a>', 'void_grid' ),
+                'raw' => __( 'To know about operator check <a href="https://elequerybuilder.com/operator/" target="_blank">this</a>', 'void' ),
                 'type' => Controls_Manager::RAW_HTML,
                 'classes' => 'elementor-descriptor',
                 'condition' => [
@@ -807,8 +807,6 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
             'void_grid_query' => 'yes',
             'void_set_offset' => $offset,
         ];
-
-        //var_dump($args);
     
         $grid_query = new \WP_Query( $args );
         
@@ -821,7 +819,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
             
             <div class="content-area void-grid">
                 <div class="site-main <?php echo esc_html( $display_type . ' '. $image_style); ?>" >       
-                <div class="row">       
+                <div class="void-row">       
                     <?php
                     if ( $grid_query->have_posts() ) : 
             
@@ -829,9 +827,11 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                     while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
                         
                         $count++;
-                        $templates->get_template_part( 'content', $display_type );
+                        //$templates->get_template_part( 'content', $display_type );
             
                     endwhile; // End of posts loop found posts
+                    // dummy for testing purpuse
+                    $templates->get_template_part( 'content', 'dummy' );
             
                     if($pagination_yes==1) :  //Start of pagination condition 
                         global $wp_query;
