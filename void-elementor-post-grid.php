@@ -11,7 +11,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-require( __DIR__ . '/void-shortcode.php' );   //loading the main plugin
+//require( __DIR__ . '/void-shortcode.php' );   //loading the main plugin
 
 define( 'VOID_ELEMENTS_FILE_', __FILE__ );
 define( 'VOID_ELEMENTS_DIR', plugin_dir_path( __FILE__ ) );

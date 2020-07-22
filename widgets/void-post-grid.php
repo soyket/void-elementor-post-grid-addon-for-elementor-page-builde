@@ -275,11 +275,11 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'label' => esc_html__('Featured Image Style', 'void'),
                 'type'  => Controls_Manager::SELECT2,
                 'options' => [
-                    '1' => 'Standard',
-                    '2' => 'left top rounded',
-                    '3' => 'left bottom rounded'
+                    'standard' => 'Standard',
+                    'top-left' => 'left top rounded',
+                    'top-right' => 'left bottom rounded'
                 ],
-                'default'   => '1',
+                'default'   => 'standard',
                 'condition' => [
                     'filter_thumbnail!' => 'NOT EXISTS',
                 ],
@@ -557,28 +557,25 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         else{
             $category = '';
         }
-		echo'<div class="elementor-shortcode">';
-            //echo do_shortcode('[voidgrid_sc_post_grid filter_thumbnail="'.$settings['filter_thumbnail'].'" cat_exclude="'.$settings['cat_exclude'].'" post_type="'.$settings['post_type'].'" pagination_yes="'.$settings['pagination_yes'].'" display_type="'.$settings['display_type'].'" posts="'.$settings['posts'].'" posts_per_row="'.$settings['posts_per_row'].'" image_style="'.$settings['image_style'].'" sticky_ignore="'.$settings['sticky_ignore'].'"  orderby="'.$settings['orderby'].'" order="'.$settings['order'].'" offset="'.$settings['offset'].'"  terms="'.$category.'" taxonomy_type="'.$settings['taxonomy_type'].'" image_size="'. $settings['image_size'] .'" ]');
-        //     extract( shortcode_atts( array (
-        //         'post_type'  => 'post',
-        //         'filter_thumbnail' => 0,
-        //         'taxonomy_type'    => '',
-        //         'cat_exclude'      => '', // actually include or exclude both
-        //         'terms'            => '', 
-        //         'display_type'     => '1',   
-        //         'posts'            => -1,
-        //         'posts_per_row'    =>  2,         
-        //         'image_style'      => '1',
-        //         'orderby'          => 'date',
-        //         'order'            => 'DESC', 
-        //         'offset'           =>  0,  
-        //         'sticky_ignore'    =>  0,
-        //         'display_type'     => 'grid',
-        //         'pagination_yes'   =>  1,
-        //             'image_size'       =>  ''
-        //    ), $atts ));
 
-        extract($settings);
+        echo'<div class="elementor-shortcode">';
+        
+            $post_type        = isset($settings['post_type'])? $settings['post_type']: '';
+            $filter_thumbnail = isset($settings['filter_thumbnail'])? $settings['filter_thumbnail']: '';
+            $taxonomy_type    = isset($settings['taxonomy_type'])? $settings['taxonomy_type']: '';
+            $cat_exclude      = isset($settings['cat_exclude'])? $settings['cat_exclude']: ''; // actually include or exclude both
+            $terms            = explode( ',', $category );
+            $display_type     = isset($settings['display_type'])? $settings['display_type']: '';   
+            $posts            = isset($settings['posts'])? $settings['posts']: '';
+            $posts_per_row    = isset($settings['posts_per_row'])? $settings['posts_per_row']: '';      
+            $image_style      = isset($settings['image_style'])? $settings['image_style']: '';
+            $orderby          = isset($settings['orderby'])? $settings['orderby']: '';
+            $order            = isset($settings['order'])? $settings['order']: '';
+            $offset           = isset($settings['offset'])? $settings['offset']: ''; 
+            $sticky_ignore    = isset($settings['sticky_ignore'])? $settings['sticky_ignore']: '';
+            $display_type     = isset($settings['display_type'])? $settings['display_type']: '';
+            $pagination_yes   = isset($settings['pagination_yes'])? $settings['pagination_yes']: '';
+            $image_size       = isset($settings['image_size'])? $settings['image_size']: '';
 
             
             set_transient('void_grid_image_size', $image_size, '60' );
@@ -586,8 +583,8 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
             
             $count = 0;         
 
-            $col_width = isset($posts_per_row) ? (12 / $posts_per_row): 12;
-            $col_no = isset($posts_per_row) ? $posts_per_row : 1;
+            $col_width = ( ($posts_per_row != '') ? (12 / $posts_per_row): 12 );
+            $col_no = ( ($posts_per_row != '') ? $posts_per_row : 1 );
             
             // display type handler will be remove after data updater
             switch ($display_type) {
@@ -609,50 +606,48 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 default:
                     $display_type = $display_type;
             }
-            
-            if( !empty( $image_style ) ){
-                if( $image_style == 1){
-                $image_style = '';
-                }
-                elseif( $image_style == 2){
-                $image_style = 'top-left';
-                }
-                else{
-                $image_style = 'top-right';
-                }
+
+            // image style handler will be remove after data updater
+            switch ($image_style) {
+                case '':
+                    $image_style = '';
+                    break;
+                case '2':
+                    $image_style = 'top-left';
+                    break;
+                case '3':
+                    $image_style = 'top-right';
+                    break;
+                default:
+                    $image_style = $image_style;
             }
-            else{
-                $image_style = '';
-            }         
-            if( !empty( $taxonomy_type ) ){
-            $tax_query = array(                        
-                            array(
-                                    'taxonomy' => $taxonomy_type,
-                                    'field'    => 'term_id',
-                                    'terms'    => $terms ,
-                                    ),
-                            );
-            }
-            else{
-            $tax_query = '';
+
+            if( $taxonomy_type != '' ){
+                $tax_query = [
+                    [
+                        'taxonomy' => $taxonomy_type,
+                        'field'    => 'term_id',
+                        'terms'    => $terms ,
+                    ],
+                ];
+            } else {
+                $tax_query = '';
             }
         
             if($filter_thumbnail){
-            $void_image_condition = array(
-                'meta_query' => array( 
-                    array(
-                        'key' => '_thumbnail_id',
-                        'compare' => $filter_thumbnail,
-                    ) 
-                )
-            );
-            }else{
-            $void_image_condition='';
+                $void_image_condition = [
+                    'meta_query' => [
+                        [
+                            'key' => '_thumbnail_id',
+                            'compare' => $filter_thumbnail,
+                        ]
+                    ]
+                ];
+            } else {
+                $void_image_condition='';
             }
         
-        
             $templates = new \Void_Template_Loader;
-            
         
             $grid_query= null;
         
@@ -664,8 +659,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 $paged = 1;
             }
         
-        
-            $args = array(
+            $args = [
                 'post_type'      => $post_type,
                 'meta_query'     => $void_image_condition,
                 'cat'            => $cat_exclude,        // actually include or exclude both  
@@ -678,13 +672,13 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'ignore_sticky_posts' => $sticky_ignore,
                 'void_grid_query' => 'yes',
                 'void_set_offset' => $offset,
-            );
+            ];
         
             $grid_query = new \WP_Query( $args );
             
             global $post_count;
             $post_count = $posts;
-            ob_start();  ?>
+            ?>
             
             <div class="content-area void-grid">
                 <div class="site-main <?php echo esc_html( $display_type . ' '. $image_style); ?>" >       
@@ -705,20 +699,20 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                         $big = 999999999; // need an unlikely integer
                         $totalpages = $grid_query->max_num_pages;
                         $current = max(1,$paged );
-                        $paginate_args = array(
-                                            'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))) ,
-                                            'format' => '?paged=%#%',
-                                            'current' => $current,
-                                            'total' => $totalpages,
-                                            'show_all' => False,
-                                            'end_size' => 1,
-                                            'mid_size' => 3,
-                                            'prev_next' => True,
-                                            'prev_text' => esc_html__('« Previous') ,
-                                            'next_text' => esc_html__('Next »') ,
-                                            'type' => 'plain',
-                                            'add_args' => False,
-                                            );
+                        $paginate_args = [
+                            'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))) ,
+                            'format' => '?paged=%#%',
+                            'current' => $current,
+                            'total' => $totalpages,
+                            'show_all' => False,
+                            'end_size' => 1,
+                            'mid_size' => 3,
+                            'prev_next' => True,
+                            'prev_text' => esc_html__('« Previous') ,
+                            'next_text' => esc_html__('Next »') ,
+                            'type' => 'plain',
+                            'add_args' => False,
+                        ];
             
                         $pagination = paginate_links($paginate_args); ?>
                         <div class="col-md-12">
