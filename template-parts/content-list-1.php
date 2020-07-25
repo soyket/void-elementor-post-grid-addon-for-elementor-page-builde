@@ -6,44 +6,37 @@
  *
  * @package void
  */
-global $blog_style;
+global $display_type;
 ?>
-	
-
-	<header class="entry-header">
-		<div class="post-img">
-			<a href="<?php echo esc_url( get_permalink() ); ?>">
-				<?php
-					if( get_transient('void_grid_image_size') ){
-						$grid_image_size = get_transient('void_grid_image_size');
-					}else{
-						$grid_image_size = 'blog-list-post-size';
-					}
-					the_post_thumbnail( $grid_image_size, array(
-							'class' => 'img-responsive',
-							'alt'	=> get_the_title( get_post_thumbnail_id() )
-							)
-					);
+<div class="void-post-grid <?php echo esc_attr( $display_type); ?>">
+	<div class="post-img">
+		<a href="<?php echo esc_url( get_permalink() ); ?>">
+			<?php
+				if( get_transient('void_grid_image_size') ){
+					$grid_image_size = get_transient('void_grid_image_size');
+				}else{
+					$grid_image_size = 'blog-list-post-size';
+				}
+				the_post_thumbnail( $grid_image_size, array(
+						'class' => 'img-responsive',
+						'alt'	=> get_the_title( get_post_thumbnail_id() )
+						)
+				);
+			?>
+		</a>
+	</div><!--.post-img-->
+	<div class="post-info">
+		<?php the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '">', '</a></h2>' ); ?>
+		<?php if ( 'post' === get_post_type() ) : ?>
+			<div class="entry-meta">
+				<?php 
+					void_entry_header();
 				?>
-		 	</a>	
-		</div>
-		<div class="post-info"> 
-			<?php		
-				the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
-				?>
-				
-				<?php
-				if ( 'post' === get_post_type() ) : ?>
-					<div class="entry-meta">
-
-						<?php						
-							void_entry_header();
-						?>
-
-					</div><!-- .entry-meta -->
-					<?php the_excerpt(); ?>
-			<?php endif; ?>
-		</div><!--.post-info-->			
-	</header><!-- .entry-header -->
-<div class="clearfix"></div>
-
+			</div><!-- .entry-meta -->
+			<div class="blog-excerpt">
+				<?php the_excerpt(); ?>
+			</div><!--.blog-excerpt-->				
+		<?php endif; ?>
+	</div>
+	<!--.post-info-->
+</div>

@@ -871,9 +871,9 @@ class Void_Post_Grid extends Widget_Base {
                         while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
                             
                             $count++;
-                            $templates->get_template_part( 'content', $display_type );
+                            //$templates->get_template_part( 'content', $display_type );
                             // dummy for testing purpuse
-                            //$templates->get_template_part( 'content', 'dummy' );
+                            $templates->get_template_part( 'content', 'dummy' );
                 
                         endwhile; // End of posts loop found posts
                         // dummy for testing purpuse
