@@ -9,7 +9,7 @@
 global $count, $col_no, $col_width, $post_count, $display_type;
 ?>
 <div class="void-col-md-<?php echo esc_attr( $col_width );?>">
-	<div class="void-post-grid void-grid-2 void-<?php echo esc_attr($display_type); ?>">
+    <div class="void-post-grid void-grid void-<?php echo esc_attr($display_type); ?>">
 		<?php if( has_post_thumbnail()) : ?>
 			<div class="post-img">
 				<a href="<?php echo esc_url( get_permalink() ); ?>">
@@ -28,6 +28,8 @@ global $count, $col_no, $col_width, $post_count, $display_type;
 				</a>
 			</div><!--.post-img-->
 		<?php endif; ?>
+
+        <!--.post-img-->
         <div class="post-info">
 			<?php the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '">', '</a></h2>' ); ?>
 			<?php if ( 'post' === get_post_type() ) : ?>
@@ -41,6 +43,7 @@ global $count, $col_no, $col_width, $post_count, $display_type;
 					<?php the_excerpt(); ?>
 				</div><!--.blog-excerpt-->				
 			<?php endif; ?>
+
         </div>
         <!--.post-info-->
     </div>
@@ -56,4 +59,4 @@ global $count, $col_no, $col_width, $post_count, $display_type;
 ?>
 <?php	if( $count%$col_no == 0 || $last_post ) : ?>
 	</div><div class="void-row">
-<?php endif; ?>
+<?php endif; ?>	

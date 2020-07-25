@@ -690,7 +690,7 @@ class Void_Post_Grid extends Widget_Base {
         $pagination_yes   = isset($settings['pagination_yes'])? $settings['pagination_yes']: '';
         $image_size       = isset($settings['image_size'])? $settings['image_size']: '';
 
-        $terms = [];
+        $all_terms = [];
 
         //build variable needed for tax_query
         if( !empty($settings[ 'tax_fields' ][0]['taxonomy_type']) ){
@@ -701,43 +701,65 @@ class Void_Post_Grid extends Widget_Base {
                 $tax_query[ 'relation' ] = 'OR';
             }
             foreach ($settings[ 'tax_fields' ] as $key => $value) {
-                // remove _id key set by ELEMENTOR CODE
-                unset( $value[ '_id' ] );
-                //as WP_QUERY uses taxonomy key not taxonomy_type
-                $value['taxonomy'] = $value['taxonomy_type'];
-                unset( $value['taxonomy_type'] );
+                if( !empty($value['taxonomy_type'])){
+                    // remove _id key set by ELEMENTOR CODE
+                    unset( $value[ '_id' ] );
+                    //as WP_QUERY uses taxonomy key not taxonomy_type
+                    $value['taxonomy'] = $value['taxonomy_type'];
+                    unset( $value['taxonomy_type'] );
 
-                $value['terms'] = is_array($value['terms']) ? $value['terms'] : [];
-                //if current post is chosen, get current post terms based on taxonomy chosen
-                foreach( $value[ 'terms' ] as $index => $val ){
-                    if( $val == 'current' ){
-                        unset( $value[ 'terms' ][$index] );
-                        $current_post_terms = get_the_terms( get_the_ID(), $value['taxonomy']  );
-                        foreach( $current_post_terms as $index => $term ){
-                            //only push terms array if that term is not actively selected, concetaning with '' to returned ineger term_id into string to be used on in_arry as select returns as array
-                            if( !( in_array( $term->term_id . '', $value['terms'] ) ) ){
-                                array_push( $value['terms'], $term->term_id );
-                            }                       
+                    $value['terms'] = is_array($value['terms']) ? $value['terms'] : [];
+                    //if current post is chosen, get current post terms based on taxonomy chosen
+                    foreach( $value[ 'terms' ] as $index => $val ){
+                        if( $val == 'current' ){
+                            unset( $value[ 'terms' ][$index] );
+                            $current_post_terms = get_the_terms( get_the_ID(), $value['taxonomy']  );
+                            foreach( $current_post_terms as $index => $term ){
+                                //only push terms array if that term is not actively selected, concetaning with '' to returned ineger term_id into string to be used on in_arry as select returns as array
+                                if( !( in_array( $term->term_id . '', $value['terms'] ) ) ){
+                                    array_push( $value['terms'], $term->term_id );
+                                }                       
+                            }
                         }
                     }
-                }
 
-                // set all terms on empty term input under the taxonomy
-                if(empty($value[ 'terms' ])){
-                    $terms = get_terms( array(
-                        'taxonomy' => $value['taxonomy'],
-                        'hide_empty' => false
-                    ) );
-                    foreach($terms as $term_key => $term_val){
-                        $value['terms'][] = $term_val->term_id;
+                    // set all terms on empty term input under the taxonomy
+                    if(empty($value[ 'terms' ])){
+                        $terms = get_terms( array(
+                            'taxonomy' => $value['taxonomy'],
+                            'hide_empty' => false
+                        ) );
+                        foreach($terms as $term_key => $term_val){
+                            $value['terms'][] = $term_val->term_id;
+                        }
                     }
+                    $tax_query[] = $value;
+                    $all_terms[$key] = $value['terms'];
+                }else{
+                    $tax_query = '';
                 }
-                
-                $tax_query[] = $value;
-            }   
+            }
+
         }else{
             $tax_query = '';
         }
+
+        var_dump($all_terms);
+        if(count($all_terms) > 1){
+            //$unique_terms = $all_terms[0];
+            for( $i=0; $i < count($all_terms); $i++){
+                if($i < (count($all_terms)-1) ){
+                    if($tax_query[ 'relation' ] == 'AND'){
+                        $unique_terms = array_intersect($all_terms[$i], $all_terms[$i+1]);
+                    }else{
+                        $unique_terms = array_unique(array_merge($all_terms[$i], $all_terms[$i+1]));
+                    }
+                }
+            }
+        }else{
+            $unique_terms = $all_terms[0];
+        }
+        var_dump($unique_terms);
 
         $meta_query = [];
 
@@ -873,9 +895,9 @@ class Void_Post_Grid extends Widget_Base {
                         while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
                             
                             $count++;
-                            $templates->get_template_part( 'content', $display_type );
+                            //$templates->get_template_part( 'content', $display_type );
                             // dummy for testing purpuse
-                            //$templates->get_template_part( 'content', 'dummy' );
+                            $templates->get_template_part( 'content', 'dummy' );
                 
                         endwhile; // End of posts loop found posts
                         // dummy for testing purpuse
