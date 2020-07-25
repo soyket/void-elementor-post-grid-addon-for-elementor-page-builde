@@ -484,6 +484,22 @@ img {
     padding-left: 15px;
     padding-right: 15px;
 }
+.void-col-md-3 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.void-col-md-2 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 16.666666%;
+    flex: 0 0 16.666666%;
+    max-width: 16.666666%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
 
 
 .void-col-md-6 {
@@ -768,12 +784,12 @@ img {
 
 
 
-.rounded1 .post-img img {
+.void-elementor-post-grid-wrapper .top-left .post-img img {
     border-top-left-radius: 75px;
     border-bottom-right-radius: 75px;
 }
 
-.rounded2 .post-img img {
+.void-elementor-post-grid-wrapper .top-right .post-img img {
     border-top-right-radius: 75px;
     border-bottom-left-radius: 75px;
 }

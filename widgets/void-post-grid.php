@@ -342,13 +342,13 @@ class Void_Post_Grid extends Widget_Base {
                     'list-1-filter' => 'List 1 with filter', 
                     'first-post-grid-1' => '1st Full Post then Grid',
                     'first-post-list-1' => '1st Full Post then List',
-                    'grid-rounded-1' => 'Grid rounded 1',
-                    'grid-rounded-1-filter' => 'Grid rounded 1 with filter',
-                    'grid-rounded-2' => 'Grid rounded 2',
-                    'grid-rounded-2-filter' => 'Grid rounded 2 with filter',
-                    'list-rounded-1' => 'List rounded 1',
-                    'list-rounded-1-filter' => 'List rounded 1 with filter',
-                    'first-post-list-rounded-1' => '1st Full Post then List rounded',
+                    // 'grid-rounded-1' => 'Grid rounded 1',
+                    // 'grid-rounded-1-filter' => 'Grid rounded 1 with filter',
+                    // 'grid-rounded-2' => 'Grid rounded 2',
+                    // 'grid-rounded-2-filter' => 'Grid rounded 2 with filter',
+                    // 'list-rounded-1' => 'List rounded 1',
+                    // 'list-rounded-1-filter' => 'List rounded 1 with filter',
+                    // 'first-post-list-rounded-1' => '1st Full Post then List rounded',
                     'minimal' => 'Minimal Grid'
                 ],
                 'default' => 'grid-1',
@@ -841,7 +841,7 @@ class Void_Post_Grid extends Widget_Base {
         $is_filter = in_array($display_type, $filter_active_list);
             ?>
             
-            <div class="void-Container">
+            <div class="void-Container <?php echo esc_attr($image_style); ?>">
             <?php if($is_filter): ?>
                 <div class="shuffle-wrapper">
                     <div class="void-row">
@@ -871,9 +871,9 @@ class Void_Post_Grid extends Widget_Base {
                         while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
                             
                             $count++;
-                            //$templates->get_template_part( 'content', $display_type );
+                            $templates->get_template_part( 'content', $display_type );
                             // dummy for testing purpuse
-                            $templates->get_template_part( 'content', 'dummy' );
+                            //$templates->get_template_part( 'content', 'dummy' );
                 
                         endwhile; // End of posts loop found posts
                         // dummy for testing purpuse
@@ -915,10 +915,10 @@ class Void_Post_Grid extends Widget_Base {
                         endif; //end of post loop ?>  
                 
                 <?php if($is_filter): ?>
-                    </div>
+                    <!-- </div> -->
                 </div>
                 <?php else: ?>
-                </div>
+                <!-- </div> -->
                 <?php endif; ?>
             </div>
             

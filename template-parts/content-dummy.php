@@ -48,3 +48,15 @@ global $count, $col_no, $col_width, $post_count, $display_type;
         <!--.post-info-->
     </div>
 </div>
+
+<?php 
+	$last_post = false;
+	if( !empty($post_count) ){
+		if(  $post_count == $count ){
+			$last_post = true;				
+		}
+	}		
+?>
+<?php	if( $count%$col_no == 0 || $last_post ) : ?>
+	</div><div class="void-row">
+<?php endif; ?>	
