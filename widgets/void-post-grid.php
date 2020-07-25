@@ -848,21 +848,21 @@ class Void_Post_Grid extends Widget_Base {
                 <div class="shuffle-wrapper">
                     <div class="void-row">
                         <div class="void-col-md-12">
-                            <div class="btn-group btn-group-toggle shuffle-filter-btn" data-toggle="buttons">
+                            <div class="btn-group btn-group-toggle void-elementor-post-grid-shuffle-btn" data-toggle="buttons">
                                 <label class="btn active">
-                                    <input type="radio" name="shuffle-filter" value="all" checked="checked" />All
+                                    <input type="radio" name="vepg-shuffle-filter" value="all" checked="checked" />All
                                 </label>
                                 <label class="btn">
-                                    <input type="radio" name="shuffle-filter" value="fl1" />Filter 1
+                                    <input type="radio" name="vepg-shuffle-filter" value="fl1" />Filter 1
                                 </label>
                                 <label class="btn">
-                                    <input type="radio" name="shuffle-filter" value="fl2" />Filter 2
+                                    <input type="radio" name="vepg-shuffle-filter" value="fl2" />Filter 2
                                 </label>
         
                             </div>
                         </div>
                     </div>
-                    <div class="shuffle-box void-shuffle-grid-1">
+                    <div class="shuffle-box void-elementor-post-grid-shuffle-body">
             <?php else: ?>
                 <div class="void-row">
             <?php endif; ?>      

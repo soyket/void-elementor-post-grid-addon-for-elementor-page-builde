@@ -23,25 +23,6 @@
     $(window).on('load', function() {
         $('#preloader').fadeOut('slow', function() { $(this).remove(); });
     });
-
-
-    // Grid Shuffle Style 1 
-    if ($('.void-shuffle-grid-1').length > 0) {
-        var Shuffle = window.Shuffle;
-        var myShuffle = new Shuffle(document.querySelector('.void-shuffle-grid-1'), {
-        itemSelector: '.grid1-item',
-        sizer: '.grid1-sizer',
-        buffer: 1,
-        });
-
-        $('input[name="shuffle-filter"]').on('change', function (evt) {
-        var input = evt.currentTarget;
-        if (input.checked) {
-            myShuffle.filter(input.value);
-        }
-        });
-        
-    }
    
 
     // Grid Shuffle Style 2 
@@ -140,17 +121,32 @@
         
     }
 
-    //Click TO Move Suffle active Filter Button 
-
-
-    $('.shuffle-filter-btn .btn').on('click', function(){
-        $('.shuffle-filter-btn .btn ').removeClass('active');
-        $(this).addClass('active');
-        // alert('Hellp');
-    });
-
     var init = function( $scope, $ ) {
-        console.log($scope);
+
+            // Grid Shuffle Style 1 
+        if ($scope.find('.void-elementor-post-grid-shuffle-body').length > 0) {
+            var Shuffle = window.Shuffle;
+            var myShuffle = new Shuffle($scope.find('.void-elementor-post-grid-shuffle-body'), {
+            itemSelector: '.grid1-item',
+            sizer: '.grid1-sizer',
+            buffer: 1,
+            });
+
+            $scope.find('input[name="vepg-shuffle-filter"]').on('change', function (evt) {
+            var input = evt.currentTarget;
+            if (input.checked) {
+                myShuffle.filter(input.value);
+            }
+            });
+            
+        }
+
+        //Click TO Move Suffle active Filter Button 
+        $scope.find('.void-elementor-post-grid-shuffle-btn .btn').on('click', function(){
+            $scope.find('.void-elementor-post-grid-shuffle-btn .btn ').removeClass('active');
+            $(this).addClass('active');
+            // alert('Hellp');
+        });
     };
 
     // inilialization of js hook on elementor frondend and editor panel

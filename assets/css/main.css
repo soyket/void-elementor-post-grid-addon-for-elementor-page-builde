@@ -628,13 +628,13 @@ img {
 }
 
 /* With Filter Button */
-.shuffle-filter-btn {
+.void-elementor-post-grid-shuffle-btn {
     position: relative;
     text-align: center;
     margin: 25px auto;
 }
 
-.shuffle-filter-btn label.btn {
+.void-elementor-post-grid-shuffle-btn label.btn {
     position: relative;
     border: 1px solid #1e7ccf;
     font-size: 18px;
@@ -648,7 +648,7 @@ img {
     transition: .5s ease;
 }
 
-.shuffle-filter-btn label.btn input[type="radio"] {
+.void-elementor-post-grid-shuffle-btn label.btn input[type="radio"] {
     position: absolute;
     left: 0;
     top: 0;
@@ -660,7 +660,7 @@ img {
     cursor: pointer;
 }
 
-.shuffle-filter-btn label.btn.active,.shuffle-filter-btn label.btn:hover {
+.void-elementor-post-grid-shuffle-btn label.btn.active,.void-elementor-post-grid-shuffle-btn label.btn:hover {
     background-color: #1e7ccf;
     color: #fff;
 }
