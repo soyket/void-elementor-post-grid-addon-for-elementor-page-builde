@@ -13,7 +13,7 @@ if( $count == 1){
 }
 ?>
 <div class="void-col-md-<?php echo esc_attr( $col_width );?>">
-	<div class="void-post-grid void-<?php echo esc_attr($display_type); ?> withExcerpt">
+	<div class="void-post-grid void-grid void-<?php echo esc_attr($display_type); ?> withExcerpt">
 	<?php if( has_post_thumbnail()) : ?>
 		<div class="post-img">
 			<a href="<?php echo esc_url( get_permalink() ); ?>">

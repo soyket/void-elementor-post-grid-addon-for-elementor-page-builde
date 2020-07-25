@@ -9,7 +9,7 @@
 global $count, $col_no, $col_width, $post_count, $display_type;
 ?>
 <div class="void-col-md-<?php echo esc_attr( $col_width );?>">
-    <div class="void-post-grid void-<?php echo esc_attr($display_type); ?>">
+    <div class="void-post-grid void-grid void-<?php echo esc_attr($display_type); ?>">
 		<?php if( has_post_thumbnail()) : ?>
 			<div class="post-img">
 				<a href="<?php echo esc_url( get_permalink() ); ?>">

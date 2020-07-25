@@ -340,8 +340,8 @@ class Void_Post_Grid extends Widget_Base {
                     'grid-2-filter' => 'Grid 2 with filter', 
                     'list-1' => 'List 1', 
                     'list-1-filter' => 'List 1 with filter', 
-                    'first-post-grid-1' => '1st Full Post then Grid',
-                    'first-post-list-1' => '1st Full Post then List',
+                    'first-full-post-grid-1' => '1st Full Post then Grid',
+                    'first-full-post-list-1' => '1st Full Post then List',
                     // 'grid-rounded-1' => 'Grid rounded 1',
                     // 'grid-rounded-1-filter' => 'Grid rounded 1 with filter',
                     // 'grid-rounded-2' => 'Grid rounded 2',
@@ -400,6 +400,7 @@ class Void_Post_Grid extends Widget_Base {
                 'condition' => [
                     'filter_thumbnail!' => 'NOT EXISTS',
                 ],
+                
 			]
 		);
         $this->add_control(
@@ -705,8 +706,9 @@ class Void_Post_Grid extends Widget_Base {
                 //as WP_QUERY uses taxonomy key not taxonomy_type
                 $value['taxonomy'] = $value['taxonomy_type'];
                 unset( $value['taxonomy_type'] );
-                //if current post is chosen, get current post terms based on taxonomy chosen
 
+                $value['terms'] = is_array($value['terms']) ? $value['terms'] : [];
+                //if current post is chosen, get current post terms based on taxonomy chosen
                 foreach( $value[ 'terms' ] as $index => $val ){
                     if( $val == 'current' ){
                         unset( $value[ 'terms' ][$index] );
@@ -727,10 +729,10 @@ class Void_Post_Grid extends Widget_Base {
                         'hide_empty' => false
                     ) );
                     foreach($terms as $term_key => $term_val){
-                        array_push( $value['terms'], $term_val->term_id );
+                        $value['terms'][] = $term_val->term_id;
                     }
                 }
-
+                
                 $tax_query[] = $value;
             }   
         }else{
@@ -775,10 +777,10 @@ class Void_Post_Grid extends Widget_Base {
                 $display_type = 'list-1';
                 break;
             case "3":
-                $display_type = 'first-post-grid-1';
+                $display_type = 'first-full-post-grid-1';
                 break;
             case "4":
-                $display_type = 'first-post-list-1';
+                $display_type = 'first-full-post-list-1';
                 break;
             case "5":
                 $display_type = 'minimal';
@@ -871,9 +873,9 @@ class Void_Post_Grid extends Widget_Base {
                         while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
                             
                             $count++;
-                            //$templates->get_template_part( 'content', $display_type );
+                            $templates->get_template_part( 'content', $display_type );
                             // dummy for testing purpuse
-                            $templates->get_template_part( 'content', 'dummy' );
+                            //$templates->get_template_part( 'content', 'dummy' );
                 
                         endwhile; // End of posts loop found posts
                         // dummy for testing purpuse
