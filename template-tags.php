@@ -11,7 +11,7 @@ if ( ! function_exists( 'void_posted_on' ) ) :
 
 function void_posted_on() {
 	$time_string_posted = '<time class="entry-date published" datetime="%1$s">%2$s</time>';
-	$time_string_updated = '<time class="entry-date updated" datetime="%1$s">%2$s</time>';
+	$time_string_updated = '<time class="entry-date updated-at" datetime="%1$s">%2$s</time>';
 	$time_string_posted = sprintf( $time_string_posted,
 		esc_attr( get_the_date( 'c' ) ),
 		esc_html( get_the_date() )
@@ -23,17 +23,17 @@ function void_posted_on() {
 
 	$posted_on = sprintf(
 		esc_html_x( '%s', 'post date', 'void' ),
-		'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string_posted . '</a>'
+		'<a href="' . esc_url( get_permalink() ) . '"><i class="fas fa-edit"></i> ' . $time_string_posted . '</a>'
 	);
 
 	$updated_on = sprintf(
 		esc_html_x( '%s', 'post date', 'void' ),
-		'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string_updated . '</a>'
+		'<a href="' . esc_url( get_permalink() ) . '"><i class="fas fa-paper-plane"></i> ' . $time_string_updated . '</a>'
 	);
 
 	$byline = sprintf(
-		esc_html_x( '%s', 'post author', 'void' ),
-		'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
+		esc_html_x( '%s', 'post author', 'void'),
+		'<span class="author vcard"><a href="'.esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ).'"><i class="fas fa-user"></i>'.esc_html( get_the_author() ).'</a></span>'
 	);
 
 	echo '<span class="posted-on">' . $posted_on . '</span>' . '<span class="updated-on">' . $updated_on . '</span><span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
@@ -61,7 +61,7 @@ function void_entry_header() {
 	if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
 		echo '<span class="comments-link">';
 		/* translators: %s: post title */
-		comments_popup_link( sprintf( wp_kses( __( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', 'void' ), array( 'span' => array( 'class' => array() ) ) ), get_the_title() ) );
+		comments_popup_link( sprintf( wp_kses( __( 'Leave a Comment<span class="void-screen-reader-text"> on %s</span>', 'void' ), array( 'span' => array( 'class' => array() ) ) ), get_the_title() ) );
 		echo '</span>';
 	}
 	

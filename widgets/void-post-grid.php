@@ -12,7 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @since 1.0.0
  */
 
-class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php of the root folder
+class Void_Post_Grid extends Widget_Base {
+    //this name is added to plugin.php of the root folder
+
+    public function __construct( $data = [], $args = null ) {
+		parent::__construct( $data, $args );
+		$this->add_style_depends('google-font-poppins');
+		$this->add_script_depends('void-elementor-grid-js');
+	}
 
 	public function get_name() {
 		return 'void-post-grid';
@@ -327,13 +334,25 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'label' => esc_html__( 'Choose your desired style', 'void' ),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'grid' => 'Grid Layout', 
-                    'list' => 'List Layout', 
-                    'first-post-grid' => '1st Full Post then Grid',
-                    'first-post-list' => '1st Full Post then List',
+                    'grid-1' => 'Grid 1', 
+                    'grid-1-filter' => 'Grid 1 with filter', 
+                    'grid-2' => 'Grid 2', 
+                    'grid-2-filter' => 'Grid 2 with filter', 
+                    'list-1' => 'List 1', 
+                    'list-1-filter' => 'List 1 with filter', 
+                    'first-post-grid-1' => '1st Full Post then Grid',
+                    'first-post-list-1' => '1st Full Post then List',
+                    'grid-rounded-1' => 'Grid rounded 1',
+                    'grid-rounded-1-filter' => 'Grid rounded 1 with filter',
+                    'grid-rounded-2' => 'Grid rounded 2',
+                    'grid-rounded-2-filter' => 'Grid rounded 2 with filter',
+                    'list-rounded-1' => 'List rounded 1',
+                    'list-rounded-1-filter' => 'List rounded 1 with filter',
+                    'first-post-list-rounded-1' => '1st Full Post then List rounded',
                     'minimal' => 'Minimal Grid'
                 ],
-                'default' => 'grid'
+                'default' => 'grid-1',
+                'label_block' => true,
             ]
         );
 
@@ -343,7 +362,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
                 'label' => esc_html__( 'Posts Per Row', 'void' ),
                 'type' => Controls_Manager::SELECT,
                 'condition' => [
-                    'display_type' => ['grid','minimal'],
+                    'display_type' => ['grid-1','minimal'],
                 ],
                 'options' => [
                     '1' => '1',
@@ -654,6 +673,8 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         //to show on the fontend 
         $settings = $this->get_settings();
 
+        global $col_no, $count, $col_width, $display_type;
+
         $post_type        = isset($settings['post_type'])? $settings['post_type']: '';
         $filter_thumbnail = isset($settings['filter_thumbnail'])? $settings['filter_thumbnail']: '';
         $cat_exclude      = isset($settings['cat_exclude'])? $settings['cat_exclude']: ''; // actually include or exclude both
@@ -665,9 +686,10 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $order            = isset($settings['order'])? $settings['order']: '';
         $offset           = isset($settings['offset'])? $settings['offset']: ''; 
         $sticky_ignore    = isset($settings['sticky_ignore'])? $settings['sticky_ignore']: '';
-        $display_type     = isset($settings['display_type'])? $settings['display_type']: '';
         $pagination_yes   = isset($settings['pagination_yes'])? $settings['pagination_yes']: '';
         $image_size       = isset($settings['image_size'])? $settings['image_size']: '';
+
+        $terms = [];
 
         //build variable needed for tax_query
         if( !empty($settings[ 'tax_fields' ][0]['taxonomy_type']) ){
@@ -738,8 +760,7 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         $meta_query[] = $void_image_condition;
 
         set_transient('void_grid_image_size', $image_size, '60' );
-        global $col_no,$count,$col_width;
-        
+    
         $count = 0;         
 
         $col_width = ( ($posts_per_row != '') ? (12 / $posts_per_row): 12 );
@@ -748,16 +769,16 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         // display type handler will be remove after data updater
         switch ($display_type) {
             case "1":
-                $display_type = 'grid';
+                $display_type = 'grid-1';
                 break;
             case "2":
-                $display_type = 'list';
+                $display_type = 'list-1';
                 break;
             case "3":
-                $display_type = 'first-post-grid';
+                $display_type = 'first-post-grid-1';
                 break;
             case "4":
-                $display_type = 'first-post-list';
+                $display_type = 'first-post-list-1';
                 break;
             case "5":
                 $display_type = 'minimal';
@@ -813,63 +834,92 @@ class Void_Post_Grid extends Widget_Base {   //this name is added to plugin.php 
         global $post_count;
         $post_count = $posts;
 
-        echo'<div class="elementor-shortcode">';
-
+        echo'<div class="void-elementor-post-grid-wrapper">';
+        // filter style list
+        $filter_active_list = ['grid-1-filter', 'grid-2-filter', 'list-1-filter', 'grid-rounded-1-filter', 'grid-rounded-2-filter', 'list-rounded-1-filter'];
+        // check filter active
+        $is_filter = in_array($display_type, $filter_active_list);
             ?>
             
-            <div class="content-area void-grid">
-                <div class="site-main <?php echo esc_html( $display_type . ' '. $image_style); ?>" >       
-                <div class="void-row">       
-                    <?php
-                    if ( $grid_query->have_posts() ) : 
-            
-                        /* Start the Loop */
-                    while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
-                        
-                        $count++;
-                        //$templates->get_template_part( 'content', $display_type );
-            
-                    endwhile; // End of posts loop found posts
-                    // dummy for testing purpuse
-                    $templates->get_template_part( 'content', 'dummy' );
-            
-                    if($pagination_yes==1) :  //Start of pagination condition 
-                        global $wp_query;
-                        $big = 999999999; // need an unlikely integer
-                        $totalpages = $grid_query->max_num_pages;
-                        $current = max(1,$paged );
-                        $paginate_args = [
-                            'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))) ,
-                            'format' => '?paged=%#%',
-                            'current' => $current,
-                            'total' => $totalpages,
-                            'show_all' => False,
-                            'end_size' => 1,
-                            'mid_size' => 3,
-                            'prev_next' => True,
-                            'prev_text' => esc_html__('« Previous') ,
-                            'next_text' => esc_html__('Next »') ,
-                            'type' => 'plain',
-                            'add_args' => False,
-                        ];
-            
-                        $pagination = paginate_links($paginate_args); ?>
-                        <div class="col-md-12">
-                            <nav class='pagination wp-caption void-grid-nav'> 
-                            <?php echo $pagination; ?>
-                            </nav>
+            <div class="void-Container">
+            <?php if($is_filter): ?>
+                <div class="shuffle-wrapper">
+                    <div class="void-row">
+                        <div class="void-col-md-12">
+                            <div class="btn-group btn-group-toggle shuffle-filter-btn" data-toggle="buttons">
+                                <label class="btn active">
+                                    <input type="radio" name="shuffle-filter" value="all" checked="checked" />All
+                                </label>
+                                <label class="btn">
+                                    <input type="radio" name="shuffle-filter" value="fl1" />Filter 1
+                                </label>
+                                <label class="btn">
+                                    <input type="radio" name="shuffle-filter" value="fl2" />Filter 2
+                                </label>
+        
+                            </div>
                         </div>
-                    <?php endif; //end of pagination condition ?>
-            
-            
-                    <?php else :   //if no posts found
-            
-                        $templates->get_template_part( 'content', 'none' );
-            
-                    endif; //end of post loop ?>  
-            
-                </div><!-- #main -->
-                </div><!-- #primary -->
+                    </div>
+                    <div class="shuffle-box void-shuffle-grid-1">
+            <?php else: ?>
+                <div class="void-row">
+            <?php endif; ?>      
+                        <?php
+                        if ( $grid_query->have_posts() ) : 
+                
+                            /* Start the Loop */
+                        while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
+                            
+                            $count++;
+                            //$templates->get_template_part( 'content', $display_type );
+                            // dummy for testing purpuse
+                            $templates->get_template_part( 'content', 'dummy' );
+                
+                        endwhile; // End of posts loop found posts
+                        // dummy for testing purpuse
+                        //$templates->get_template_part( 'content', 'dummy' );
+                
+                        if($pagination_yes==1) :  //Start of pagination condition 
+                            global $wp_query;
+                            $big = 999999999; // need an unlikely integer
+                            $totalpages = $grid_query->max_num_pages;
+                            $current = max(1,$paged );
+                            $paginate_args = [
+                                'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))) ,
+                                'format' => '?paged=%#%',
+                                'current' => $current,
+                                'total' => $totalpages,
+                                'show_all' => False,
+                                'end_size' => 1,
+                                'mid_size' => 3,
+                                'prev_next' => True,
+                                'prev_text' => esc_html__('« Previous') ,
+                                'next_text' => esc_html__('Next »') ,
+                                'type' => 'plain',
+                                'add_args' => False,
+                            ];
+                
+                            $pagination = paginate_links($paginate_args); ?>
+                            <div class="col-md-12">
+                                <nav class='pagination wp-caption void-grid-nav'> 
+                                <?php echo $pagination; ?>
+                                </nav>
+                            </div>
+                        <?php endif; //end of pagination condition ?>
+                
+                
+                        <?php else :   //if no posts found
+                
+                            $templates->get_template_part( 'content', 'none' );
+                
+                        endif; //end of post loop ?>  
+                
+                <?php if($is_filter): ?>
+                    </div>
+                </div>
+                <?php else: ?>
+                </div>
+                <?php endif; ?>
             </div>
             
             <?php

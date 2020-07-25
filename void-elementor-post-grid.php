@@ -82,6 +82,19 @@ function void_grid_elementor_js_load() {
 }
 add_action( 'elementor/editor/after_enqueue_scripts', 'void_grid_elementor_js_load');
 
+
+function void_elementor_post_grid_js_load(){
+    wp_register_script( 'void-elementor-grid-js', VOID_GRID_PLUGIN_URL . 'assets/js/plugin.js', array('jquery'), VOID_GRID_VERSION, true );
+}
+
+add_action( 'elementor/frontend/before_enqueue_scripts', 'void_elementor_post_grid_js_load');
+
+function void_elementor_post_grid_css_load(){
+    wp_register_style( 'google-font-poppins', 'https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap', [], VOID_GRID_VERSION );
+}
+
+add_action( 'elementor/frontend/before_enqueue_styles', 'void_elementor_post_grid_css_load');
+
 // add plugin activation time
 
 function void_grid_activation_time(){
