@@ -6,10 +6,23 @@
  *
  * @package void
  */
-global $count, $col_no, $col_width, $post_count, $display_type;
+global $col_width, $display_type, $is_filter;
+global $post;
+
+$taxonomies = get_post_taxonomies($post);
+$terms_id = '[';
+foreach($taxonomies as $t_k => $t_v){
+	$terms = get_the_terms( $post->ID , $t_v );
+	foreach($terms as $term){
+		$terms_id .= '"'.$term->term_id.'",';
+	}
+}
+$terms_id = rtrim($terms_id, ',');
+$terms_id .= ']';
+
 ?>
-<div class="void-col-md-<?php echo esc_attr( $col_width );?>">
-	<div class="void-post-grid void-grid-2 void-<?php echo esc_attr($display_type); ?>">
+<div class="void-col-md-<?php echo esc_attr( $col_width );?> <?php echo esc_attr(($is_filter)? ' grid-item': ''); ?>" data-groups='<?php echo esc_attr(($is_filter)? $terms_id: ''); ?>'>
+    <div class="void-post-grid void-grid-2 void-<?php echo esc_attr($display_type); ?> ">
 		<?php if( has_post_thumbnail()) : ?>
 			<div class="post-img">
 				<a href="<?php echo esc_url( get_permalink() ); ?>">
@@ -45,15 +58,3 @@ global $count, $col_no, $col_width, $post_count, $display_type;
         <!--.post-info-->
     </div>
 </div>
-
-<?php 
-	$last_post = false;
-	if( !empty($post_count) ){
-		if(  $post_count == $count ){
-			$last_post = true;				
-		}
-	}		
-?>
-<?php	if( $count%$col_no == 0 || $last_post ) : ?>
-	</div><div class="void-row">
-<?php endif; ?>

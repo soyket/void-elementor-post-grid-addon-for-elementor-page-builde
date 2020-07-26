@@ -6,7 +6,21 @@
  *
  * @package void
  */
-global $display_type;
+global $col_width, $display_type, $is_filter;
+global $post;
+
+$taxonomies = get_post_taxonomies($post);
+$terms_id = '[';
+foreach($taxonomies as $t_k => $t_v){
+	$terms = get_the_terms( $post->ID , $t_v );
+	foreach($terms as $term){
+		$terms_id .= '"'.$term->term_id.'",';
+	}
+}
+$terms_id = rtrim($terms_id, ',');
+$terms_id .= ']';
+
+?>
 ?>
 <div class="void-col-md-12">
 	<div class="void-post-grid void-list withExcerpt <?php echo esc_attr( $display_type); ?>">

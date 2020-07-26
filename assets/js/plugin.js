@@ -14,8 +14,6 @@
 (function($) {
     "use strict";
 
-    console.log('loaded plugin.js');
-
     /*---------------------
     preloader
     --------------------- */
@@ -127,23 +125,44 @@
         if ($scope.find('.void-elementor-post-grid-shuffle-body').length > 0) {
             var Shuffle = window.Shuffle;
             var myShuffle = new Shuffle($scope.find('.void-elementor-post-grid-shuffle-body'), {
-            itemSelector: '.grid1-item',
-            sizer: '.grid1-sizer',
+            itemSelector: '.grid-item',
+            sizer: '.grid-sizer',
             buffer: 1,
             });
 
-            $scope.find('input[name="vepg-shuffle-filter"]').on('change', function (evt) {
-            var input = evt.currentTarget;
-            if (input.checked) {
-                myShuffle.filter(input.value);
+            var cnt = 0;
+            var initialInput = $scope.find('input[name="vepg-shuffle-filter"]:first');
+            var allFilter = $scope.find('input.void-shuffle-all-filter');
+
+            if(allFilter.length == 0){
+                var parent = initialInput.parent();
+                if( parent.hasClass('active') && (cnt <= 0) ){
+                    activeFilter(initialInput);
+                    //$scope.find('input[name="vepg-shuffle-filter"]').trigger('change');
+                    cnt++;
+                }
             }
+
+            $scope.find('input[name="vepg-shuffle-filter"]').on('change', function (evt) {
+                activeFilter(evt);
             });
+            
+            function activeFilter(evt){
+                var input = evt.currentTarget;
+                console.log(cnt);
+                if(allFilter.length == 0 && cnt == 0){
+                    var input = evt[0];
+                }
+                if (input.checked) {
+                    myShuffle.filter(input.value);
+                }
+            }
             
         }
 
-        //Click TO Move Suffle active Filter Button 
+        //Click TO Move Suffle active Filter Button
         $scope.find('.void-elementor-post-grid-shuffle-btn .btn').on('click', function(){
-            $scope.find('.void-elementor-post-grid-shuffle-btn .btn ').removeClass('active');
+            $scope.find('.void-elementor-post-grid-shuffle-btn .btn').removeClass('active');
             $(this).addClass('active');
             // alert('Hellp');
         });

@@ -53,7 +53,6 @@ jQuery( function( $ ) {
                 $('[data-setting="filter_taxonomy_type"]').trigger('change');
             }
             var post_type = $('[data-setting="post_type"]').val() || model.attributes.settings.attributes.post_type || [];
-            console.log('post type: '+ post_type);
             var data = {
                 action: 'void_grid_ajax_tax',
                 postTypeNonce: void_grid_ajax.postTypeNonce,
@@ -138,21 +137,18 @@ jQuery( function( $ ) {
             return true;
         });
         //get taxonomy
-        var control_sections = $('#elementor-controls').find('.elementor-control-type-section');
-        $.each(control_sections, function(inx, val){
-            $(this).on('change', function(e){
-                console.log('filter section on change');
-                // pass onload value false, means the value was actively changed  
-                void_grid_get_taxonomy_for_filter( false );
-                return true;
-            });
+        var control_sections = $('#elementor-controls').find('.elementor-control-section_filter_void_grid').find('.elementor-panel-heading-title');
+        if(control_sections.length > 0){
+            console.log('selector found!');
+        }
+        //console.log(control_sections);
+        control_sections.on('click', function(e){
+            console.log('filter section on click');
+            // pass onload value false, means the value was actively changed  
+            void_grid_get_taxonomy_for_filter( false );
+            return true;
         });
-        // $('#elementor-controls').find('.elementor-control-section_filter_void_grid').on( 'click', function( event ){
-        //     console.log('filter section on change');
-        //     // pass onload value false, means the value was actively changed  
-        //     void_grid_get_taxonomy_for_filter( false );
-        //     return true;
-        // });
+
         //get terms
         $('#elementor-controls').on( 'change', '[data-setting="taxonomy_type"]', function(){  
             //pass $this to keep the changes to each different taxonomy
@@ -166,6 +162,7 @@ jQuery( function( $ ) {
         });
         //this ensures the data remains the same even after switching back from advanced tab to content tab
         $( '.elementor-tab-control-content a' ).on( 'click',function(event){
+            console.log('pass around model function call event');
             pass_around_model( panel,model,view );
         });
 

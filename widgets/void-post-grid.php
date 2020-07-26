@@ -153,18 +153,6 @@ class Void_Post_Grid extends Widget_Base {
         );
 
         $this->add_control(
-			'filter_taxonomy_type_2',
-			[
-				'label' => __( 'Select taxonomy type', 'void' ),
-				'type' => Controls_Manager::SELECT,
-                'options' => (object) array(),
-                'condition' => [
-                    'void_show_filter_bar' => 'true',
-                ],
-			]
-		);
-
-        $this->add_control(
 			'meta_query_section',
 			[
 				'label' => __( 'Meta query', 'void' ),
@@ -374,7 +362,7 @@ class Void_Post_Grid extends Widget_Base {
                 'label' => esc_html__( 'Posts Per Row', 'void' ),
                 'type' => Controls_Manager::SELECT,
                 'condition' => [
-                    'display_type' => ['grid-1','minimal'],
+                    'display_type' => ['grid-1', 'grid-2', 'minimal'],
                 ],
                 'options' => [
                     '1' => '1',
@@ -454,18 +442,18 @@ class Void_Post_Grid extends Widget_Base {
 				'default' => 'false',
 			]
         );
-        
+
         $this->add_control(
-			'filter_taxonomy_type',
+			'void_show_all_filter_bar',
 			[
-				'label' => __( 'Select taxonomy type', 'void' ),
-				'type' => Controls_Manager::SELECT,
-                'options' => (object) array(),
-                'condition' => [
-                    'void_show_filter_bar' => 'true',
-                ],
+				'label' => __( 'All show', 'void' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_on' => __( 'On', 'void' ),
+				'label_off' => __( 'Off', 'void' ),
+				'return_value' => 'true',
+				'default' => 'true',
 			]
-		);
+        );
 
         $this->end_controls_section();
 
@@ -720,7 +708,7 @@ class Void_Post_Grid extends Widget_Base {
         //to show on the fontend 
         $settings = $this->get_settings();
 
-        global $col_no, $count, $col_width, $display_type;
+        global $col_no, $count, $col_width, $display_type, $is_filter;
 
         $post_type        = isset($settings['post_type'])? $settings['post_type']: '';
         $filter_thumbnail = isset($settings['filter_thumbnail'])? $settings['filter_thumbnail']: '';
@@ -735,6 +723,8 @@ class Void_Post_Grid extends Widget_Base {
         $sticky_ignore    = isset($settings['sticky_ignore'])? $settings['sticky_ignore']: '';
         $pagination_yes   = isset($settings['pagination_yes'])? $settings['pagination_yes']: '';
         $image_size       = isset($settings['image_size'])? $settings['image_size']: '';
+        $is_filter        = isset($settings['void_show_filter_bar'])? $settings['void_show_filter_bar']: 'off';
+        $is_all_filter    = isset($settings['void_show_all_filter_bar'])? $settings['void_show_all_filter_bar']: 'off';
 
         $all_terms = [];
 
@@ -790,22 +780,23 @@ class Void_Post_Grid extends Widget_Base {
             $tax_query = '';
         }
 
-        var_dump($all_terms);
+        //var_dump($all_terms);
+        $unique_terms = [];
         if(count($all_terms) > 1){
-            //$unique_terms = $all_terms[0];
             for( $i=0; $i < count($all_terms); $i++){
                 if($i < (count($all_terms)-1) ){
+                    $tmp_array = array_merge($unique_terms, $all_terms[$i]);
                     if($tax_query[ 'relation' ] == 'AND'){
-                        $unique_terms = array_intersect($all_terms[$i], $all_terms[$i+1]);
+                        $unique_terms = array_intersect($tmp_array, $all_terms[$i+1]);
                     }else{
-                        $unique_terms = array_unique(array_merge($all_terms[$i], $all_terms[$i+1]));
+                        $unique_terms = array_unique(array_merge($tmp_array, $all_terms[$i+1]));
                     }
                 }
             }
         }else{
             $unique_terms = $all_terms[0];
         }
-        var_dump($unique_terms);
+        //var_dump($unique_terms);
 
         $meta_query = [];
 
@@ -905,28 +896,25 @@ class Void_Post_Grid extends Widget_Base {
         $post_count = $posts;
 
         echo'<div class="void-elementor-post-grid-wrapper">';
-        // filter style list
-        $filter_active_list = ['grid-1-filter', 'grid-2-filter', 'list-1-filter', 'grid-rounded-1-filter', 'grid-rounded-2-filter', 'list-rounded-1-filter'];
-        // check filter active
-        $is_filter = in_array($display_type, $filter_active_list);
             ?>
-            
             <div class="void-Container <?php echo esc_attr($image_style); ?>">
             <?php if($is_filter): ?>
                 <div class="shuffle-wrapper">
                     <div class="void-row">
                         <div class="void-col-md-12">
                             <div class="btn-group btn-group-toggle void-elementor-post-grid-shuffle-btn" data-toggle="buttons">
-                                <label class="btn active">
-                                    <input type="radio" name="vepg-shuffle-filter" value="all" checked="checked" />All
-                                </label>
-                                <label class="btn">
-                                    <input type="radio" name="vepg-shuffle-filter" value="fl1" />Filter 1
-                                </label>
-                                <label class="btn">
-                                    <input type="radio" name="vepg-shuffle-filter" value="fl2" />Filter 2
-                                </label>
-        
+                                <?php if($is_all_filter) : ?>
+                                    <label class="btn active">
+                                        <input class="void-shuffle-all-filter" type="radio" name="vepg-shuffle-filter" value="all" checked="checked" />All
+                                    </label>
+                                <?php endif; ?>
+                                <?php foreach($unique_terms as $k => $v) :
+                                    $term = get_term($v);
+                                ?>
+                                    <label class="btn <?php echo esc_attr((!$is_all_filter && $k==0)? 'active': ''); ?>">
+                                        <input type="radio" name="vepg-shuffle-filter" value="<?php echo esc_attr($term->term_id); ?>" <?php echo esc_attr((!$is_all_filter && $k==0)? 'checked="checked"': ''); ?> /><?php echo esc_html($term->name); ?>
+                                    </label>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
@@ -941,9 +929,9 @@ class Void_Post_Grid extends Widget_Base {
                         while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
                             
                             $count++;
-                            //$templates->get_template_part( 'content', $display_type );
+                            $templates->get_template_part( 'content', $display_type );
                             // dummy for testing purpuse
-                            $templates->get_template_part( 'content', 'dummy' );
+                            //$templates->get_template_part( 'content', 'dummy' );
                 
                         endwhile; // End of posts loop found posts
                         // dummy for testing purpuse
@@ -985,10 +973,11 @@ class Void_Post_Grid extends Widget_Base {
                         endif; //end of post loop ?>  
                 
                 <?php if($is_filter): ?>
-                    <!-- </div> -->
+                    </div>
+                    <div class="void-col-md-<?php echo esc_attr( $col_width );?> grid-sizer"></div>
                 </div>
                 <?php else: ?>
-                <!-- </div> -->
+                </div>
                 <?php endif; ?>
             </div>
             
@@ -998,30 +987,6 @@ class Void_Post_Grid extends Widget_Base {
 	}
 
 }
-
-// $current_url=esc_url("//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-
-// if( strpos( $current_url, 'action=elementor') == true ){
-//     add_action( 'wp_footer', function() {
-
-//         if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
-//             return;
-//         }
-    
-//         // load our jquery file that sends the $.post request
-//         wp_enqueue_script( "void-grid-ajax", plugins_url('assets/js/void-ajax.js', dirname(__FILE__)) , array( 'jquery', 'json2' ) );
-    
-//         // make the ajaxurl var available to the above script
-//         wp_localize_script(
-//             'void-grid-ajax',
-//             'void_grid_ajax',
-//             [
-//                 'ajaxurl'          => admin_url( 'admin-ajax.php' ),
-//                 'postTypeNonce' => wp_create_nonce( 'voidgrid-post-type-nonce' ),
-//             ] 
-//         );
-//     } );
-// }
 
 
 
