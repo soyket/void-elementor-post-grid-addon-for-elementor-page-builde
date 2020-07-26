@@ -153,6 +153,18 @@ class Void_Post_Grid extends Widget_Base {
         );
 
         $this->add_control(
+			'filter_taxonomy_type_2',
+			[
+				'label' => __( 'Select taxonomy type', 'void' ),
+				'type' => Controls_Manager::SELECT,
+                'options' => (object) array(),
+                'condition' => [
+                    'void_show_filter_bar' => 'true',
+                ],
+			]
+		);
+
+        $this->add_control(
 			'meta_query_section',
 			[
 				'label' => __( 'Meta query', 'void' ),
@@ -335,11 +347,11 @@ class Void_Post_Grid extends Widget_Base {
                 'type' => Controls_Manager::SELECT,
                 'options' => [
                     'grid-1' => 'Grid 1', 
-                    'grid-1-filter' => 'Grid 1 with filter', 
+                    //'grid-1-filter' => 'Grid 1 with filter', 
                     'grid-2' => 'Grid 2', 
-                    'grid-2-filter' => 'Grid 2 with filter', 
+                    //'grid-2-filter' => 'Grid 2 with filter', 
                     'list-1' => 'List 1', 
-                    'list-1-filter' => 'List 1 with filter', 
+                    //'list-1-filter' => 'List 1 with filter', 
                     'first-full-post-grid-1' => '1st Full Post then Grid',
                     'first-full-post-list-1' => '1st Full Post then List',
                     // 'grid-rounded-1' => 'Grid rounded 1',
@@ -421,7 +433,41 @@ class Void_Post_Grid extends Widget_Base {
         );
        
       
-		$this->end_controls_section();
+        $this->end_controls_section();
+        
+        $this->start_controls_section(
+            'section_filter_void_grid',
+            [
+                'label' => esc_html__( 'Filter bar', 'void' ),
+                'tab' => Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+			'void_show_filter_bar',
+			[
+				'label' => __( 'Show', 'void' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_on' => __( 'Show', 'void' ),
+				'label_off' => __( 'Hide', 'void' ),
+				'return_value' => 'true',
+				'default' => 'false',
+			]
+        );
+        
+        $this->add_control(
+			'filter_taxonomy_type',
+			[
+				'label' => __( 'Select taxonomy type', 'void' ),
+				'type' => Controls_Manager::SELECT,
+                'options' => (object) array(),
+                'condition' => [
+                    'void_show_filter_bar' => 'true',
+                ],
+			]
+		);
+
+        $this->end_controls_section();
 
 
 

@@ -2,6 +2,7 @@ jQuery( function( $ ) {
     elementor.hooks.addAction( 'panel/open_editor/widget/void-post-grid', function( panel, model, view ) {
         //call initially to set the already saved data
         void_grid_get_taxonomy();
+        void_grid_get_taxonomy_for_filter();
        
         //function to get taxonomy based on post type 
         function void_grid_get_taxonomy( onload = true ){
@@ -20,12 +21,12 @@ jQuery( function( $ ) {
 
             if(!$.isEmptyObject(post_type)){
                 $.post(void_grid_ajax.ajaxurl, data, function(response) { 
-                    var taxonomy_name = JSON.parse(response);          
+                    var taxonomy_name = JSON.parse(response);       
                     $.each(taxonomy_name,function(){
                         if(this.name == 'post_format'){
                             return;
                         }
-                    
+
                         $('[data-setting="taxonomy_type"]').append('<option value="'+this.name+'">'+this.name+'</option>'); 
                         
                     });
@@ -39,9 +40,50 @@ jQuery( function( $ ) {
                     }else{
                         $('[data-setting="taxonomy_type"]').removeAttr('disabled');
                     }
-                });//$.post                
+                });//$.post         
             }        
         }//void_grid_get_taxonomy()
+
+        //function to get taxonomy based on post type 
+        function void_grid_get_taxonomy_for_filter( onload = true ){
+            $('[data-setting="filter_taxonomy_type"]').empty();
+            //only trigger change to reset selected taxonomy option when post type is actively changed
+            if( onload == false && event.type == 'change' ){
+                //this is needed to reset the selected taxonomy
+                $('[data-setting="filter_taxonomy_type"]').trigger('change');
+            }
+            var post_type = $('[data-setting="post_type"]').val() || model.attributes.settings.attributes.post_type || [];
+            console.log('post type: '+ post_type);
+            var data = {
+                action: 'void_grid_ajax_tax',
+                postTypeNonce: void_grid_ajax.postTypeNonce,
+                post_type: post_type
+            };
+
+            if(!$.isEmptyObject(post_type)){
+                $.post(void_grid_ajax.ajaxurl, data, function(response) { 
+                    var taxonomy_name = JSON.parse(response);       
+                    $.each(taxonomy_name,function(){
+                        if(this.name == 'post_format'){
+                            return;
+                        }
+
+                        $('[data-setting="filter_taxonomy_type"]').append('<option value="'+this.name+'">'+this.name+'</option>'); 
+                        
+                    });
+
+                    // set already selected value
+                    $('[data-setting="filter_taxonomy_type"]').val( model.attributes.settings.attributes.filter_taxonomy_type );
+
+                    if( $('[data-setting="filter_taxonomy_type"]').has('option').length == 0 ) {
+                        $('[data-setting="filter_taxonomy_type"]').attr('disabled', 'disabled');
+                    }else{
+                        $('[data-setting="filter_taxonomy_type"]').removeAttr('disabled');
+                    }
+
+                });//$.post                
+            }        
+        }//void_grid_get_taxonomy_for_filter()
 
         //function to get terms based on taxonomy
         function void_grid_terms( onload = true ){
@@ -57,7 +99,7 @@ jQuery( function( $ ) {
                 onload.closest('.elementor-repeater-row-controls').find('[data-setting="terms"]').empty();
             }    
            
-            
+
             //if no taxonomy selected stop the function to avoid showing null value in terms
             if( taxonomy_type == null ){
                 return;
@@ -85,6 +127,7 @@ jQuery( function( $ ) {
         //when moving from Advanced tab to content model variable is null so to pass it's data
         function pass_around_model(panel,model,view){
             void_grid_get_taxonomy();
+            void_grid_get_taxonomy_for_filter();
         }
 
         //get taxonomy
@@ -94,6 +137,22 @@ jQuery( function( $ ) {
             $('[data-setting="taxonomy_type"]')[0].selectedIndex = -1;
             return true;
         });
+        //get taxonomy
+        var control_sections = $('#elementor-controls').find('.elementor-control-type-section');
+        $.each(control_sections, function(inx, val){
+            $(this).on('change', function(e){
+                console.log('filter section on change');
+                // pass onload value false, means the value was actively changed  
+                void_grid_get_taxonomy_for_filter( false );
+                return true;
+            });
+        });
+        // $('#elementor-controls').find('.elementor-control-section_filter_void_grid').on( 'click', function( event ){
+        //     console.log('filter section on change');
+        //     // pass onload value false, means the value was actively changed  
+        //     void_grid_get_taxonomy_for_filter( false );
+        //     return true;
+        // });
         //get terms
         $('#elementor-controls').on( 'change', '[data-setting="taxonomy_type"]', function(){  
             //pass $this to keep the changes to each different taxonomy
