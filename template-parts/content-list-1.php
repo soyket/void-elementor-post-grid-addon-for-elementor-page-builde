@@ -21,8 +21,7 @@ $terms_id = rtrim($terms_id, ',');
 $terms_id .= ']';
 
 ?>
-?>
-<div class="void-col-md-12">
+<div class="void-col-md-12 <?php echo esc_attr(($is_filter)? ' list-item': ''); ?>" data-groups='<?php echo esc_attr(($is_filter)? $terms_id: ''); ?>'>
 	<div class="void-post-grid void-list withExcerpt <?php echo esc_attr( $display_type); ?>">
 		<div class="post-img">
 			<a href="<?php echo esc_url( get_permalink() ); ?>">

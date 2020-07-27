@@ -41,27 +41,6 @@
         
     }
 
-
-    // List Shuffle Style 1 
-    if ($('.void-shuffle-list-1').length > 0) {
-        var Shuffle = window.Shuffle;
-        var myShufflelist1 = new Shuffle(document.querySelector('.void-shuffle-list-1'), {
-        itemSelector: '.list1-item',
-        sizer: '.list1-sizer',
-        buffer: 1,
-        });
-
-        $('input[name="shuffle-list1-filter"]').on('change', function (evt) {
-        var input = evt.currentTarget;
-        if (input.checked) {
-            myShufflelist1.filter(input.value);
-        }
-        });
-        
-    }
-
-
-
     // Grid Rounded Shuffle Style 3 
     if ($('.void-shuffle-grid-3').length > 0) {
         var Shuffle = window.Shuffle;
@@ -121,15 +100,7 @@
 
     var init = function( $scope, $ ) {
 
-            // Grid Shuffle Style 1 
-        if ($scope.find('.void-elementor-post-grid-shuffle-body').length > 0) {
-            var Shuffle = window.Shuffle;
-            var myShuffle = new Shuffle($scope.find('.void-elementor-post-grid-shuffle-body'), {
-            itemSelector: '.grid-item',
-            sizer: '.grid-sizer',
-            buffer: 1,
-            });
-
+        function shuffle(shuffle) {
             var cnt = 0;
             var initialInput = $scope.find('input[name="vepg-shuffle-filter"]:first');
             var allFilter = $scope.find('input.void-shuffle-all-filter');
@@ -138,7 +109,6 @@
                 var parent = initialInput.parent();
                 if( parent.hasClass('active') && (cnt <= 0) ){
                     activeFilter(initialInput);
-                    //$scope.find('input[name="vepg-shuffle-filter"]').trigger('change');
                     cnt++;
                 }
             }
@@ -154,9 +124,45 @@
                     var input = evt[0];
                 }
                 if (input.checked) {
-                    myShuffle.filter(input.value);
+                    shuffle.filter(input.value);
                 }
-            }
+            }            
+        }
+        // Grid Shuffle Style 1 
+        if ($scope.find('.void-elementor-post-grid-grid-1').length > 0) {
+            var Shuffle = window.Shuffle;
+            var gridShuffle = new Shuffle($scope.find('.void-elementor-post-grid-grid-1'), {
+            itemSelector: '.grid-item',
+            sizer: '.filter-sizer',
+            buffer: 1,
+            });
+
+            shuffle(gridShuffle);
+            
+        }
+        // grid shuffle style 2
+        if ($scope.find('.void-elementor-post-grid-grid-2').length > 0) {
+            var Shuffle = window.Shuffle;
+            var gridShuffle2 = new Shuffle($scope.find('.void-elementor-post-grid-grid-2'), {
+            itemSelector: '.grid-item',
+            sizer: '.filter-sizer',
+            buffer: 1,
+            });
+
+            shuffle(gridShuffle2);
+            
+        }
+
+        // List Shuffle Style 1 
+        if ($scope.find('.void-elementor-post-grid-list-1').length > 0) {
+            var Shuffle = window.Shuffle;
+            var listShuffle = new Shuffle($scope.find('.void-elementor-post-grid-list-1'), {
+            itemSelector: '.list-item',
+            sizer: '.filter-sizer',
+            buffer: 1,
+            });
+
+            shuffle(listShuffle);
             
         }
 

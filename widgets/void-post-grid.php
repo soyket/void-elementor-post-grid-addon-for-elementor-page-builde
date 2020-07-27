@@ -918,7 +918,7 @@ class Void_Post_Grid extends Widget_Base {
                             </div>
                         </div>
                     </div>
-                    <div class="shuffle-box void-elementor-post-grid-shuffle-body">
+                    <div class="shuffle-box void-elementor-post-grid-<?php echo esc_attr($display_type); ?>">
             <?php else: ?>
                 <div class="void-row">
             <?php endif; ?>      
@@ -934,8 +934,6 @@ class Void_Post_Grid extends Widget_Base {
                             //$templates->get_template_part( 'content', 'dummy' );
                 
                         endwhile; // End of posts loop found posts
-                        // dummy for testing purpuse
-                        //$templates->get_template_part( 'content', 'dummy' );
                 
                         if($pagination_yes==1) :  //Start of pagination condition 
                             global $wp_query;
@@ -974,7 +972,7 @@ class Void_Post_Grid extends Widget_Base {
                 
                 <?php if($is_filter): ?>
                     </div>
-                    <div class="void-col-md-<?php echo esc_attr( $col_width );?> grid-sizer"></div>
+                    <div class="void-col-md-<?php echo esc_attr( $col_width );?> filter-sizer"></div>
                 </div>
                 <?php else: ?>
                 </div>
