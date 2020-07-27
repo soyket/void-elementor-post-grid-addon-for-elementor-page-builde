@@ -2,7 +2,6 @@ jQuery( function( $ ) {
     elementor.hooks.addAction( 'panel/open_editor/widget/void-post-grid', function( panel, model, view ) {
         //call initially to set the already saved data
         void_grid_get_taxonomy();
-        void_grid_get_taxonomy_for_filter();
        
         //function to get taxonomy based on post type 
         function void_grid_get_taxonomy( onload = true ){
@@ -43,46 +42,6 @@ jQuery( function( $ ) {
                 });//$.post         
             }        
         }//void_grid_get_taxonomy()
-
-        //function to get taxonomy based on post type 
-        function void_grid_get_taxonomy_for_filter( onload = true ){
-            $('[data-setting="filter_taxonomy_type"]').empty();
-            //only trigger change to reset selected taxonomy option when post type is actively changed
-            if( onload == false && event.type == 'change' ){
-                //this is needed to reset the selected taxonomy
-                $('[data-setting="filter_taxonomy_type"]').trigger('change');
-            }
-            var post_type = $('[data-setting="post_type"]').val() || model.attributes.settings.attributes.post_type || [];
-            var data = {
-                action: 'void_grid_ajax_tax',
-                postTypeNonce: void_grid_ajax.postTypeNonce,
-                post_type: post_type
-            };
-
-            if(!$.isEmptyObject(post_type)){
-                $.post(void_grid_ajax.ajaxurl, data, function(response) { 
-                    var taxonomy_name = JSON.parse(response);       
-                    $.each(taxonomy_name,function(){
-                        if(this.name == 'post_format'){
-                            return;
-                        }
-
-                        $('[data-setting="filter_taxonomy_type"]').append('<option value="'+this.name+'">'+this.name+'</option>'); 
-                        
-                    });
-
-                    // set already selected value
-                    $('[data-setting="filter_taxonomy_type"]').val( model.attributes.settings.attributes.filter_taxonomy_type );
-
-                    if( $('[data-setting="filter_taxonomy_type"]').has('option').length == 0 ) {
-                        $('[data-setting="filter_taxonomy_type"]').attr('disabled', 'disabled');
-                    }else{
-                        $('[data-setting="filter_taxonomy_type"]').removeAttr('disabled');
-                    }
-
-                });//$.post                
-            }        
-        }//void_grid_get_taxonomy_for_filter()
 
         //function to get terms based on taxonomy
         function void_grid_terms( onload = true ){
@@ -126,7 +85,6 @@ jQuery( function( $ ) {
         //when moving from Advanced tab to content model variable is null so to pass it's data
         function pass_around_model(panel,model,view){
             void_grid_get_taxonomy();
-            void_grid_get_taxonomy_for_filter();
         }
 
         //get taxonomy
@@ -134,18 +92,6 @@ jQuery( function( $ ) {
             // pass onload value false, means the value was actively changed  
             void_grid_get_taxonomy( false );
             $('[data-setting="taxonomy_type"]')[0].selectedIndex = -1;
-            return true;
-        });
-        //get taxonomy
-        var control_sections = $('#elementor-controls').find('.elementor-control-section_filter_void_grid').find('.elementor-panel-heading-title');
-        if(control_sections.length > 0){
-            console.log('selector found!');
-        }
-        //console.log(control_sections);
-        control_sections.on('click', function(e){
-            console.log('filter section on click');
-            // pass onload value false, means the value was actively changed  
-            void_grid_get_taxonomy_for_filter( false );
             return true;
         });
 
@@ -162,7 +108,6 @@ jQuery( function( $ ) {
         });
         //this ensures the data remains the same even after switching back from advanced tab to content tab
         $( '.elementor-tab-control-content a' ).on( 'click',function(event){
-            console.log('pass around model function call event');
             pass_around_model( panel,model,view );
         });
 

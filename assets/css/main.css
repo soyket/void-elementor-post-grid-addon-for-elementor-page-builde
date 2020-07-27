@@ -674,35 +674,35 @@ img {
 --------------------------
 */
 
-.void-post-grid.void-grid-2 .post-info {
+.void-post-grid.void-minimal-grid .post-info {
     position: relative;
     padding-top: 60px;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-.void-post-grid.void-grid-2 span.posted-on,
-.void-post-grid.void-grid-2 span.updated-on,
-.void-post-grid.void-grid-2 span.byline,
-.void-post-grid.void-grid-2 span.comments-link {
+.void-post-grid.void-minimal-grid span.posted-on,
+.void-post-grid.void-minimal-grid span.updated-on,
+.void-post-grid.void-minimal-grid span.byline,
+.void-post-grid.void-minimal-grid span.comments-link {
     display: none;
 }
 
-.void-post-grid.void-grid-2 .post-info .entry-meta {
+.void-post-grid.void-minimal-grid .post-info .entry-meta {
     position: absolute;
     top: 15px;
     width: 100%;
     text-align: center;
 }
 
-.void-post-grid.void-grid-2 .post-info .entry-meta span.tags-links a ,
-.void-post-grid.void-grid-2 .post-info .entry-meta span.cat-links a {
+.void-post-grid.void-minimal-grid .post-info .entry-meta span.tags-links a ,
+.void-post-grid.void-minimal-grid .post-info .entry-meta span.cat-links a {
     color: #7cb0b9;
     font-size: 18px;
     font-weight: 500;
 }
 
-.void-post-grid.void-grid-2 {
+.void-post-grid.void-minimal-grid {
     border: 1px solid #d3d3d3;
     margin: 15px auto;
     padding-bottom: 25px;

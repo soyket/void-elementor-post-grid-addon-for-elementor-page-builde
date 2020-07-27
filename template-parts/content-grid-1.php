@@ -13,6 +13,7 @@ $taxonomies = get_post_taxonomies($post);
 $terms_id = '[';
 foreach($taxonomies as $t_k => $t_v){
 	$terms = get_the_terms( $post->ID , $t_v );
+	$terms = is_array($terms)? $terms: [];
 	foreach($terms as $term){
 		$terms_id .= '"'.$term->term_id.'",';
 	}
@@ -21,7 +22,7 @@ $terms_id = rtrim($terms_id, ',');
 $terms_id .= ']';
 
 ?>
-<div class="void-col-md-<?php echo esc_attr( $col_width );?> <?php echo esc_attr(($is_filter)? ' grid-item': ''); ?>" data-groups='<?php echo esc_attr(($is_filter)? $terms_id: ''); ?>'>
+<div class="void-col-md-<?php echo esc_attr( $col_width );?> <?php echo esc_attr(($is_filter == 'true')? ' grid-item': ''); ?>" data-groups='<?php echo esc_attr(($is_filter == 'true')? $terms_id: ''); ?>'>
     <div class="void-post-grid void-grid void-<?php echo esc_attr($display_type); ?> ">
 		<?php if( has_post_thumbnail()) : ?>
 			<div class="post-img">

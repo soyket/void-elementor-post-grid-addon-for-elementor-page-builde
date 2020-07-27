@@ -1,103 +1,10 @@
-// -----------------------------
-
-//   js index
-/* =================== */
-/*  
-    
-
-    
-
-*/
-// -----------------------------
-
-
 (function($) {
     "use strict";
-
-    /*---------------------
-    preloader
-    --------------------- */
-
+    
     $(window).on('load', function() {
         $('#preloader').fadeOut('slow', function() { $(this).remove(); });
     });
-   
-
-    // Grid Shuffle Style 2 
-    if ($('.void-shuffle-grid-2').length > 0) {
-        var Shuffle = window.Shuffle;
-        var myShuffle2 = new Shuffle(document.querySelector('.void-shuffle-grid-2'), {
-        itemSelector: '.grid2-item',
-        sizer: '.grid2-sizer',
-        buffer: 1,
-        });
-
-        $('input[name="shuffle2-filter"]').on('change', function (evt) {
-        var input = evt.currentTarget;
-        if (input.checked) {
-            myShuffle2.filter(input.value);
-        }
-        });
-        
-    }
-
-    // Grid Rounded Shuffle Style 3 
-    if ($('.void-shuffle-grid-3').length > 0) {
-        var Shuffle = window.Shuffle;
-        var myShuffle3 = new Shuffle(document.querySelector('.void-shuffle-grid-3'), {
-        itemSelector: '.grid3-item',
-        sizer: '.grid3-sizer',
-        buffer: 1,
-        });
-
-        $('input[name="shuffle4-filter"]').on('change', function (evt) {
-        var input = evt.currentTarget;
-        if (input.checked) {
-            myShuffle3.filter(input.value);
-        }
-        });
-        
-    }
-
-    // Grid Rounded Shuffle Style 4
-    if ($('.void-shuffle-grid-4').length > 0) {
-        var Shuffle = window.Shuffle;
-        var myShuffle4 = new Shuffle(document.querySelector('.void-shuffle-grid-4'), {
-        itemSelector: '.grid4-item',
-        sizer: '.grid4-sizer',
-        buffer: 1,
-        });
-
-        $('input[name="shuffle5-filter"]').on('change', function (evt) {
-        var input = evt.currentTarget;
-        if (input.checked) {
-            myShuffle4.filter(input.value);
-        }
-        });
-        
-    }
-
-
-
-
-    // List Rounded Shuffle Style 2 
-    if ($('.void-shuffle-list-2').length > 0) {
-        var Shuffle = window.Shuffle;
-        var myShuffle5 = new Shuffle(document.querySelector('.void-shuffle-list-2'), {
-        itemSelector: '.list2-item',
-        sizer: '.list2-sizer',
-        buffer: 1,
-        });
-
-        $('input[name="shuffle6-filter"]').on('change', function (evt) {
-        var input = evt.currentTarget;
-        if (input.checked) {
-            myShuffle5.filter(input.value);
-        }
-        });
-        
-    }
-
+    
     var init = function( $scope, $ ) {
 
         function shuffle(shuffle) {
@@ -119,7 +26,6 @@
             
             function activeFilter(evt){
                 var input = evt.currentTarget;
-                console.log(cnt);
                 if(allFilter.length == 0 && cnt == 0){
                     var input = evt[0];
                 }
@@ -141,10 +47,10 @@
             
         }
         // grid shuffle style 2
-        if ($scope.find('.void-elementor-post-grid-grid-2').length > 0) {
+        if ($scope.find('.void-elementor-post-grid-minimal').length > 0) {
             var Shuffle = window.Shuffle;
-            var gridShuffle2 = new Shuffle($scope.find('.void-elementor-post-grid-grid-2'), {
-            itemSelector: '.grid-item',
+            var gridShuffle2 = new Shuffle($scope.find('.void-elementor-post-grid-minimal'), {
+            itemSelector: '.minimal-grid',
             sizer: '.filter-sizer',
             buffer: 1,
             });
@@ -179,9 +85,6 @@
 
         // call the initialization function after loading elementor editor
         elementorFrontend.hooks.addAction( 'frontend/element_ready/void-post-grid.default', init);
-        
-        // call the the functionality of add, edit form when elementor editor panel is open for edit
-        //elementor.hooks.addAction('panel/open_editor/widget/void-section-cf7', addEditActionFunction);
 
     });
 
