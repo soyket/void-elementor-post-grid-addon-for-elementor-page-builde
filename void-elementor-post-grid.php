@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Void Elementor Post Grid Addon for Elementor Page builder
  * Description: Elementor Post Grid in 5 different style by voidcoders for elementor page builder
- * Version:     2.0
+ * Version:     2.1
  * Author:      VOID CODERS
  * Plugin URI:  https://voidcoders.com/product/post-grid-add-on-for-elementor-free/
  * Author URI:  http://voidcoders.com
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 //require( __DIR__ . '/void-shortcode.php' );   //loading the main plugin
 
-define('VOID_GRID_VERSION', '1.1.0');
+define('VOID_GRID_VERSION', '2.1');
 define('VOID_GRID_PLUGIN_URL', trailingslashit(plugin_dir_url( __FILE__ )));
 define('VOID_GRID_PLUGIN_DIR', trailingslashit(plugin_dir_path( __FILE__ )));
 
@@ -25,7 +25,7 @@ require VOID_ELEMENTS_DIR . 'void-template-loader.php';
 require VOID_ELEMENTS_DIR . 'template-tags.php';
 
     
-    function voidgrid_load_elements() {
+function voidgrid_load_elements() {
     // Load localization file
     load_plugin_textdomain( 'void' );
 
@@ -45,6 +45,8 @@ require VOID_ELEMENTS_DIR . 'template-tags.php';
     //loading the main plugin
     // helper file for this plugin. currently used for gettings all post type. also used for ajax request handle
     require __DIR__ . '/helper/helper.php';
+    // taxonom data updater include
+    require __DIR__ . '/data-updater/init.php';
 
 }
 add_action( 'plugins_loaded', 'voidgrid_load_elements' ); 
@@ -62,6 +64,40 @@ function voidgrid_load_elements_notice() { ?>
     <?php endif; ?>
 <?php }
 add_action('admin_notices', 'voidgrid_load_elements_notice');
+
+function void_grid_data_update_notice() {
+
+	$version = get_option('void_grid_active_info');
+	$update_info = get_option('VOID_GRID_DATA_UPDATE');
+	$active_time = get_option('void_grid_elementor_post_grid_activation_time');
+
+	if ( (!isset($update_info['taxonomy_repeater']['status']) || $update_info['taxonomy_repeater']['status'] == '0') && $active_time ) {
+		?>
+		<div class="notice notice-error">
+			<?php echo sprintf( 
+				__( '<div class="void-query-message-inner">
+						<div class="void-query-message-icon">
+							<img class="void-query-notice-icon" src="%s" alt="Void post grid builder logo">
+						</div>
+						<div class="void-query-message-content">
+							<strong>Void post grid - Requires Database update.</strong>
+							<p>Please Press Update now button to update your database for the plugin. We suggest you take a full backup of your site or database before you proceed.</p>
+						</div>
+						<div class="void-query-message-action">
+							<a class="void-query-button" href="%s">Update Now</a>
+						</div>
+					</div>'
+				),
+					plugins_url('void-elementor-post-grid-addon-for-elementor-page-builde/assets/img/void-grid-logo.png'),
+					admin_url('?void_grid_database_updater=taxonomy-repeater')
+			); ?>
+			
+		</div>
+	<?php
+	}
+}
+
+add_action('admin_notices', 'void_grid_data_update_notice');
 
 function void_grid_image_size(){
     add_image_size( 'blog-list-post-size', 350 );
@@ -99,10 +135,23 @@ add_action( 'elementor/frontend/before_enqueue_styles', 'void_elementor_post_gri
 // add plugin activation time
 
 function void_grid_activation_time(){
-    $get_installation_time = strtotime("now");
-    add_option('void_grid_elementor_post_grid_activation_time', $get_installation_time ); 
+    add_action( 'wp_loaded', 'void_grid_wp_load_action' );
 }
 register_activation_hook( __FILE__, 'void_grid_activation_time' );
+
+
+/**
+ * action after wp load function
+ *
+ * @return void
+ * @since 1.1
+ */
+function void_grid_wp_load_action(){
+	update_option('void_grid_active_info', [
+			'version' => VOID_GRID_VERSION,
+			'void_grid_activation_time' => strtotime("now"),
+		]);
+}
 
 //check if review notice should be shown or not
 
@@ -110,7 +159,8 @@ function void_grid_check_installation_time() {
 
     $spare_me = get_option('void_grid_spare_me');
     if( !$spare_me ){
-        $install_date = get_option( 'void_grid_elementor_post_grid_activation_time' );
+        $install_info = get_option( 'veqb_active_info' );
+        $install_date = isset($install_info['void_grid_activation_time'])? $install_info['void_grid_activation_time']: '';
         $past_date = strtotime( '-7 days' );
      
         if ( $past_date >= $install_date ) {
@@ -120,6 +170,7 @@ function void_grid_check_installation_time() {
         }
     }
 }
+
 add_action( 'admin_init', 'void_grid_check_installation_time' );
  
 /**
@@ -152,8 +203,10 @@ add_action( 'admin_init', 'void_grid_spare_me', 5 );
 
 //add admin css
 function void_grid_admin_css(){
-     global $pagenow;
-    if( $pagenow == 'index.php' ){
+    global $pagenow;
+    $update_info = get_option('VOID_GRID_DATA_UPDATE');
+	$active_time = get_option('void_grid_elementor_post_grid_activation_time');
+    if( $pagenow == 'index.php' || !$update_info || $active_time ){
         wp_enqueue_style( 'void-grid-admin', plugins_url( 'assets/css/void-grid-admin.css', __FILE__ ) );
     }
 }

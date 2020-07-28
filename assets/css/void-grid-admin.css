@@ -18,3 +18,44 @@
 	float: right;
 	text-decoration: none;
 }
+
+/* notice css start */
+.void-query-message-inner {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+.void-query-message-icon,
+.void-query-message-icon > img{
+	height: 50px;
+	width: 50px;
+}
+.void-query-message-content{
+	padding: 0 20px;
+}
+.void-query-message-content p{
+	padding: 0;
+    margin: 0;
+}
+.void-query-message-action{
+	text-align: center;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    margin-left: auto;
+}
+.void-query-message-action .void-query-button{
+	background-color: #d30c5c;
+    color: #fff;
+    border-color: #7c1337;
+    -webkit-box-shadow: 0 1px 0 #7c1337;
+    box-shadow: 0 1px 0 #7c1337;
+    padding: 5px 30px;
+    height: auto;
+    line-height: 20px;
+	text-transform: capitalize;
+	text-decoration: none;
+    border-radius: 5px;
+}
+/* notice css end */

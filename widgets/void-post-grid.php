@@ -553,7 +553,7 @@ class Void_Post_Grid extends Widget_Base {
                 'label' => esc_html__( 'Meta Icon Color', 'void' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .entry-meta' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .entry-meta i' => 'color: {{VALUE}};',
                 ],
             ]
         );
@@ -820,42 +820,6 @@ class Void_Post_Grid extends Widget_Base {
 
         $col_width = ( ($posts_per_row != '') ? (12 / $posts_per_row): 12 );
         $col_no = ( ($posts_per_row != '') ? $posts_per_row : 1 );
-        
-        // display type handler will be remove after data updater
-        switch ($display_type) {
-            case "1":
-                $display_type = 'grid-1';
-                break;
-            case "2":
-                $display_type = 'list-1';
-                break;
-            case "3":
-                $display_type = 'first-full-post-grid-1';
-                break;
-            case "4":
-                $display_type = 'first-full-post-list-1';
-                break;
-            case "5":
-                $display_type = 'minimal';
-                break;
-            default:
-                $display_type = $display_type;
-        }
-
-        // image style handler will be remove after data updater
-        switch ($image_style) {
-            case '':
-                $image_style = '';
-                break;
-            case '2':
-                $image_style = 'top-left';
-                break;
-            case '3':
-                $image_style = 'top-right';
-                break;
-            default:
-                $image_style = $image_style;
-        }
     
         $templates = new \Void_Template_Loader;
     
