@@ -1,178 +1,20 @@
-﻿/*-----------------------------------------------------------------------------------
-
-    Template Name: 
-    Template URI: 
-    Description: This is html5 template
-    Author: 
-    Author URI: 
-    Version: 1.0
-
------------------------------------------------------------------------------------
-
-    CSS INDEX
-    ===================
-  
-    NEW CSS
-    
------------------------------------------------------------------------------------*/
-
-
-/*----------------------------------------*/
-/*  1. Plugin default CSS
-/*----------------------------------------*/
-
-.clear {
-    clear: both
-}
-
-::-moz-selection {
-    background: #00b0ff;
-    color: #fff;
-    text-shadow: none;
-}
-
-::selection {
-    background: #00b0ff;
-    color: #fff;
-    text-shadow: none;
-}
-
-.no-mar {
-    margin: 0!important;
-}
-
-.no-pad {
-    padding: 0!important;
-}
-
-div#preloader {
-    background: #000;
-    height: 100%;
-    left: 0;
-    overflow: visible;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 999;
-}
-
-header.navbar-fixed-top {
-    animation-duration: 0.8s;
-    animation-name: fadeInDown;
-    animation-timing-function: ease-in-out;
-    box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.75);
-    left: 0;
-    padding-top: 20px;
-    position: fixed !important;
-    right: 0;
-    top: 0;
-    width: 100%;
-    z-index: 999;
-}
-
-.mar-bot-50 {
-    margin-bottom: 50px;
-}
-
-.mar-bot-40 {
-    margin-bottom: 40px;
-}
-
-.mar-bot-35 {
-    margin-bottom: 35px;
-}
-
-.mar-bot-30 {
-    margin-bottom: 30px;
-}
-
-.mar-top-30 {
-    margin-top: 30px;
-}
-
-.mar-top-80 {
-    margin-top: 80px;
-}
-
-.mar-top-80 {
-    margin-top: 80px;
-}
-
-.mar-top-55 {
-    margin-top: 55px;
-}
-
-.mar-top-108 {
-    margin-top: 108px;
-}
-
-.text-left {
-    text-align: left;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.text-right {
-    text-align: right;
-}
-
-*,
-*:before,
-*:after {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-*:focus {
-    outline: 0;
-}
-
-html {
-    font-size: 62.5%;
-    -webkit-font-smoothing: antialiased;
-}
-
-body {
-    background: #fff;
-    font-weight: normal;
-    font-size: 15px;
-    letter-spacing: 1.5px;
-    color: #888;
-    line-height: 30px;
-    -webkit-font-smoothing: antialiased;
-    /* Fix for webkit rendering */
-    -webkit-text-size-adjust: 100%;
-}
-
-/* 
-Table Of Contents
-=========================
-- Default Typography
-- Custom Typography
-=========================
-*/
-
-
-/* 
+﻿/* 
 --------------------------
 - Default Typography
 --------------------------
 */
 
-body {
+.void-elementor-post-grid-wrapper {
     font-family: 'Poppins', sans-serif;
 
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.void-elementor-post-grid-wrapper h1,
+.void-elementor-post-grid-wrapper h2,
+.void-elementor-post-grid-wrapper h3,
+.void-elementor-post-grid-wrapper h4,
+.void-elementor-post-grid-wrapper h5,
+.void-elementor-post-grid-wrapper h6 {
     margin: 0;
     font-family: 'Poppins', sans-serif;
 
@@ -181,18 +23,18 @@ h6 {
     letter-spacing: 1.5px;
 }
 
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {
+.void-elementor-post-grid-wrapper h1 a,
+.void-elementor-post-grid-wrapper h2 a,
+.void-elementor-post-grid-wrapper h3 a,
+.void-elementor-post-grid-wrapper h4 a,
+.void-elementor-post-grid-wrapper h5 a,
+.void-elementor-post-grid-wrapper h6 a {
     font-weight: inherit;
     font-family: 'Poppins', sans-serif;
 
 }
 
-p {
+.void-elementor-post-grid-wrapper p {
     font-family: 'Poppins', sans-serif;
 
     font-size: 14px;
@@ -202,14 +44,14 @@ p {
     margin: 0;
 }
 
-span {
+.void-elementor-post-grid-wrapper span {
     font-family: 'Poppins', sans-serif;
 
 }
 
 /*  blockquotes */
 
-blockquote {
+.void-elementor-post-grid-wrapper blockquote {
     border-left: 0 none;
     font-family: 'Poppins', sans-serif;
 
@@ -218,8 +60,8 @@ blockquote {
     position: relative;
 }
 
-a,
-a:visited {
+.void-elementor-post-grid-wrapper a,
+.void-elementor-post-grid-wrapper a:visited {
     text-decoration: none;
     font-family: 'Poppins', sans-serif;
 
@@ -233,7 +75,7 @@ a:visited {
     outline: 0;
 }
 
-img {
+.void-elementor-post-grid-wrapper img {
     max-width: 100%;
     height: auto;
 }
@@ -384,7 +226,7 @@ img {
 .void-post-grid.void-grid {
     position: relative;
     margin: 15px auto;
-    min-height: 694px;
+    min-height: 500px;
 }
 .void-post-grid.void-grid .post-img {
     text-align: center;
@@ -444,10 +286,7 @@ img {
     color: #fff;
 }
 
-
 /* -----Grid 1 Style END----- */
-
-
 
 /* 
 --------------------------
@@ -490,12 +329,6 @@ img {
     min-height: 766px;
 }
 /* -----Grid 2 Style END----- */
-
-
-
-
-
-
 
 /* 
 --------------------------
@@ -555,8 +388,6 @@ img {
 }
 
 /* -------List 1 Style END------- */
-
-
 
 /* 
 --------------------------

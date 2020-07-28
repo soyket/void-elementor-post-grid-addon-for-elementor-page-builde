@@ -18,6 +18,7 @@ class Void_Post_Grid extends Widget_Base {
     public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
 		$this->add_style_depends('google-font-poppins');
+		$this->add_style_depends('void-grid-main');
 		$this->add_script_depends('void-elementor-grid-js');
 	}
 
