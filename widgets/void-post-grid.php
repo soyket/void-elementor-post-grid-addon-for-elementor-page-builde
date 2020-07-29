@@ -744,16 +744,16 @@ class Void_Post_Grid extends Widget_Base {
         $post_type        = isset($settings['post_type'])? $settings['post_type']: '';
         $filter_thumbnail = isset($settings['filter_thumbnail'])? $settings['filter_thumbnail']: '';
         $cat_exclude      = isset($settings['cat_exclude'])? $settings['cat_exclude']: ''; // actually include or exclude both
-        $display_type     = isset($settings['display_type'])? $settings['display_type']: '';   
+        $display_type     = isset($settings['display_type'])? $settings['display_type']: 'grid-1';   
         $posts            = isset($settings['posts'])? $settings['posts']: '';
         $posts_per_row    = isset($settings['posts_per_row'])? $settings['posts_per_row']: '';      
-        $image_style      = isset($settings['image_style'])? $settings['image_style']: '';
+        $image_style      = isset($settings['image_style'])? $settings['image_style']: 'standard';
         $orderby          = isset($settings['orderby'])? $settings['orderby']: '';
         $order            = isset($settings['order'])? $settings['order']: '';
         $offset           = isset($settings['offset'])? $settings['offset']: ''; 
         $sticky_ignore    = isset($settings['sticky_ignore'])? $settings['sticky_ignore']: '';
         $pagination_yes   = isset($settings['pagination_yes'])? $settings['pagination_yes']: '';
-        $image_size       = isset($settings['image_size'])? $settings['image_size']: '';
+        $image_size       = isset($settings['image_size'])? $settings['image_size']: 'standart';
         $is_filter        = isset($settings['void_show_filter_bar'])? $settings['void_show_filter_bar']: 'false';
         $is_all_filter    = isset($settings['void_show_all_filter_bar'])? $settings['void_show_all_filter_bar']: 'false';
 
