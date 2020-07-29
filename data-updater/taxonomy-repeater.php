@@ -19,7 +19,7 @@ function void_grid_data_update_taxonomy_repeater(){
 
         // void query builder used widget's page condition
 		if(array_key_exists('void-post-grid', $meta_value)){
-            voidquery_data_taxonomy_update($value->post_id);
+            void_grid_data_taxonomy_update($value->post_id);
 		}
     }
 
@@ -45,7 +45,7 @@ function void_grid_data_update_taxonomy_repeater(){
  * @since 1.1
  * @param int $id
  */
-function voidquery_data_taxonomy_update($id){
+function void_grid_data_taxonomy_update($id){
 
     // get elementor settings
     $elementor_db_setting = json_decode(get_post_meta($id, '_elementor_data', true));
