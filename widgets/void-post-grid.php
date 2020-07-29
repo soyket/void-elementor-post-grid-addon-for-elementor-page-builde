@@ -271,8 +271,8 @@ class Void_Post_Grid extends Widget_Base {
                     ],
                     'default' => 1,
                     'condition' => [
-                            'posts!' => -1,
-                        ]
+                        'posts!' => -1,
+                    ]
                 ]
             );
         $this->add_control(
@@ -699,6 +699,9 @@ class Void_Post_Grid extends Widget_Base {
                 'selectors' => [
                     '{{WRAPPER}} .void-grid-nav' => 'text-align: {{VALUE}};',
                 ],
+                'condition' => [
+                    'posts!' => -1,
+                ]
             ]
         );
         $this->add_responsive_control(
@@ -719,8 +722,11 @@ class Void_Post_Grid extends Widget_Base {
                 ],
                 'size_units' => [ 'px', '%' ],
                 'selectors' => [
-                    '{{WRAPPER}} .void-grid-nav' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .void-grid-nav, {{WRAPPER}} .void-grid-nav a' => 'font-size: {{SIZE}}{{UNIT}};',
                 ],
+                'condition' => [
+                    'posts!' => -1,
+                ]
             ]
         );
 
