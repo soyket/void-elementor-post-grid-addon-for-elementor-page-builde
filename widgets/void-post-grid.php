@@ -16,7 +16,11 @@ class Void_Post_Grid extends Widget_Base {
     //this name is added to plugin.php of the root folder
 
     public function __construct( $data = [], $args = null ) {
-		parent::__construct( $data, $args );
+        parent::__construct( $data, $args );
+        // load default font awesome from elementor
+        if(class_exists('\Elementor\Icons_Manager')){
+            \Elementor\Icons_Manager::enqueue_shim();
+        }
 		$this->add_style_depends('google-font-poppins');
 		$this->add_style_depends('void-grid-main');
 		$this->add_script_depends('void-elementor-grid-js');
@@ -526,6 +530,33 @@ class Void_Post_Grid extends Widget_Base {
         );
 
         $this->add_responsive_control(
+            'meta_font_size',
+            [
+                'label' => esc_html__( 'Meta Size', 'void' ),
+                'type' => Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 1000,
+                        'step' => 5,
+                    ],
+                    '%' => [
+                        'min' => 0,
+                        'max' => 100,
+                    ],
+                ],
+                'size_units' => [ 'px', '%' ],
+                'default' => [
+					'unit' => 'px',
+					'size' => 15,
+				],
+                'selectors' => [
+                    '{{WRAPPER}} .entry-meta span a' => 'font-size: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
             'meta_color',
             [
                 'label' => esc_html__( 'Meta Color', 'void' ),
@@ -876,64 +907,107 @@ class Void_Post_Grid extends Widget_Base {
                             </div>
                         </div>
                     </div>
+                    <!-- shuffle div start -->
                     <div class="shuffle-box void-elementor-post-grid-<?php echo esc_attr($display_type); ?>">
             <?php else: ?>
                 <div class="void-row">
             <?php endif;
-                if ( $grid_query->have_posts() ) : 
-        
-                    /* Start the Loop */
-                while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
-                    
-                    $count++;
-                    $templates->get_template_part( 'content', $display_type );
-                    // dummy for testing purpuse
-                    //$templates->get_template_part( 'content', 'dummy' );
-        
-                endwhile; // End of posts loop found posts
-
-                    if($is_filter == 'true' && !in_array($display_type, ['first-full-post-grid-1', 'first-full-post-list-1'])): ?>
-                    </div>
-                <div class="void-col-md-<?php echo esc_attr( $col_width );?> filter-sizer"></div>
-            </div>
-            <?php else: ?>
-            </div>
-            <?php endif;
+                if(is_archive()){
+                    if(have_posts()):
+                        while ( have_posts() ) : the_post();
+                        $count++;
+                        $templates->get_template_part( 'content', $display_type );
                 
-                if($pagination_yes==1) :  //Start of pagination condition 
-                    global $wp_query;
-                    $big = 999999999; // need an unlikely integer
-                    $totalpages = $grid_query->max_num_pages;
-                    $current = max(1,$paged );
-                    $paginate_args = [
-                        'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))) ,
-                        'format' => '?paged=%#%',
-                        'current' => $current,
-                        'total' => $totalpages,
-                        'show_all' => False,
-                        'end_size' => 1,
-                        'mid_size' => 3,
-                        'prev_next' => True,
-                        'prev_text' => esc_html__('« Previous') ,
-                        'next_text' => esc_html__('Next »') ,
-                        'type' => 'plain',
-                        'add_args' => False,
-                    ];
-        
-                    $pagination = paginate_links($paginate_args); ?>
-                    <div class="col-md-12">
-                        <nav class='pagination wp-caption void-grid-nav'> 
-                        <?php echo $pagination; ?>
-                        </nav>
-                    </div>
-                <?php endif; //end of pagination condition ?>
-        
-        
-                <?php else :   //if no posts found
-        
-                    $templates->get_template_part( 'content', 'none' );
-        
-                endif; //end of post loop ?>  
+                        endwhile; // End of posts loop found posts
+                            if($is_filter == 'true' && !in_array($display_type, ['first-full-post-grid-1', 'first-full-post-list-1'])): ?>
+                                </div>
+                            <div class="void-col-md-<?php echo esc_attr( $col_width );?> filter-sizer"></div>
+                        </div>
+                        <?php else: ?>
+                        </div>
+                        <?php endif;
+                        if($pagination_yes==1) : 
+                            //Start of pagination condition 
+                            global $wp_query;
+                            $big = 999999999; // need an unlikely integer
+                            $current = max(1,$paged );
+                            $paginate_args = [
+                                'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))) ,
+                                'format' => '?paged=%#%',
+                                'current' => $current,
+                                'show_all' => False,
+                                'prev_next' => True,
+                                'prev_text' => esc_html__('« Previous') ,
+                                'next_text' => esc_html__('Next »') ,
+                                'type' => 'plain',
+                                'add_args' => False,
+                            ];
+                
+                            $pagination = paginate_links($paginate_args); ?>
+                            <div class="col-md-12">
+                                <nav class='pagination wp-caption void-grid-nav'> 
+                                <?php echo $pagination; ?>
+                                </nav>
+                            </div>
+                        <?php
+                        endif; //end of pagination condition
+                    else:
+                        $templates->get_template_part( 'content', 'none' );
+                    endif;
+                }else{
+
+                    if ( $grid_query->have_posts() ) : 
+                
+                            /* Start the Loop */
+                        while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
+                            $count++;
+                            $templates->get_template_part( 'content', $display_type );
+                
+                        endwhile; // End of posts loop found posts
+                            if($is_filter == 'true' && !in_array($display_type, ['first-full-post-grid-1', 'first-full-post-list-1'])): ?>
+                            </div>
+                        <div class="void-col-md-<?php echo esc_attr( $col_width );?> filter-sizer"></div>
+                        </div>
+                        <?php else: ?>
+                        </div>
+                        <?php endif;
+                        if($pagination_yes==1) :  //Start of pagination condition 
+                            global $wp_query;
+                            $big = 999999999; // need an unlikely integer
+                            $totalpages = $grid_query->max_num_pages;
+                            $current = max(1,$paged );
+                            $paginate_args = [
+                                'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))) ,
+                                'format' => '?paged=%#%',
+                                'current' => $current,
+                                'total' => $totalpages,
+                                'show_all' => False,
+                                'end_size' => 1,
+                                'mid_size' => 3,
+                                'prev_next' => True,
+                                'prev_text' => esc_html__('« Previous') ,
+                                'next_text' => esc_html__('Next »') ,
+                                'type' => 'plain',
+                                'add_args' => False,
+                            ];
+                
+                            $pagination = paginate_links($paginate_args); ?>
+                            <div class="col-md-12">
+                                <nav class='pagination wp-caption void-grid-nav'> 
+                                <?php echo $pagination; ?>
+                                </nav>
+                            </div>
+                        <?php endif; //end of pagination condition ?>
+            
+            
+                    <?php else :   //if no posts found
+            
+                        $templates->get_template_part( 'content', 'none' );
+            
+                    endif; //end of post loop 
+                }
+                ?>
+                
             </div>
             
             <?php
