@@ -111,5 +111,11 @@ jQuery( function( $ ) {
             pass_around_model( panel,model,view );
         });
 
+        $('.elementor-controls-stack').on('mouseenter', function() {
+            $(".elementor-control-section_content").on("click", function (event) {
+                pass_around_model( panel,model,view );
+            });
+        });
+
     });//end .addAction
 });
