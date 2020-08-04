@@ -63,6 +63,11 @@ function voidgrid_load_elements_notice() { ?>
 <?php }
 add_action('admin_notices', 'voidgrid_load_elements_notice');
 
+/**
+ * data update call back function
+ *
+ * @since 2.1
+ */
 function void_grid_data_update_notice() {
 
 	$version = get_option('void_grid_active_info');
@@ -102,8 +107,12 @@ function void_grid_image_size(){
 }
 add_action('init', 'void_grid_image_size');
 
+/**
+ * load js in elementor editor panel call back function
+ *
+ * @since 1.0.0
+ */
 function void_grid_elementor_js_load() {
-
     // load our jquery file that sends the $.post request
     wp_enqueue_script( "void-grid-ajax", plugins_url('assets/js/void-ajax.js', VOID_ELEMENTS_FILE_ ) , array( 'jquery', 'json2' ), VOID_GRID_VERSION, true );
 
