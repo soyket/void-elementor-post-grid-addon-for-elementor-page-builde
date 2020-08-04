@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Void Elementor Post Grid Addon for Elementor Page builder
  * Description: Elementor Post Grid in 5 different style by voidcoders for elementor page builder
- * Version:     2.1
+ * Version:     2.1.1
  * Author:      VOID CODERS
  * Plugin URI:  https://voidcoders.com/product/post-grid-add-on-for-elementor-free/
  * Author URI:  http://voidcoders.com
@@ -11,9 +11,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-//require( __DIR__ . '/void-shortcode.php' );   //loading the main plugin
-
-define('VOID_GRID_VERSION', '2.1');
+define('VOID_GRID_VERSION', '2.1.1');
 define('VOID_GRID_PLUGIN_URL', trailingslashit(plugin_dir_url( __FILE__ )));
 define('VOID_GRID_PLUGIN_DIR', trailingslashit(plugin_dir_path( __FILE__ )));
 
@@ -107,10 +105,10 @@ add_action('init', 'void_grid_image_size');
 function void_grid_elementor_js_load() {
 
     // load our jquery file that sends the $.post request
-    wp_enqueue_script( "void-query-ajax", plugins_url('assets/js/void-ajax.js', VOID_ELEMENTS_FILE_ ) , array( 'jquery', 'json2' ), time(), true );
+    wp_enqueue_script( "void-grid-ajax", plugins_url('assets/js/void-ajax.js', VOID_ELEMENTS_FILE_ ) , array( 'jquery', 'json2' ), VOID_GRID_VERSION, true );
 
     // make the ajaxurl var available to the above script
-    wp_localize_script( 'void-query-ajax', 'void_grid_ajax', array(
+    wp_localize_script( 'void-grid-ajax', 'void_grid_ajax', array(
         'ajaxurl'          => admin_url( 'admin-ajax.php' ),
         'postTypeNonce' => wp_create_nonce( 'void_grid-post-type-nonce' ),
         ) 
@@ -118,13 +116,14 @@ function void_grid_elementor_js_load() {
 }
 add_action( 'elementor/editor/after_enqueue_scripts', 'void_grid_elementor_js_load');
 
-
+// shuffle handle js register. enqueue will be occured when the widget will be dragged
 function void_elementor_post_grid_js_load(){
     wp_register_script( 'void-elementor-grid-js', VOID_GRID_PLUGIN_URL . 'assets/js/plugin.js', array('jquery'), VOID_GRID_VERSION, true );
 }
 
 add_action( 'elementor/frontend/before_enqueue_scripts', 'void_elementor_post_grid_js_load');
 
+// font and css register for front-end design. enqueue will be occured when the widget will be dragged
 function void_elementor_post_grid_css_load(){
     wp_register_style( 'google-font-poppins', 'https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap', [], VOID_GRID_VERSION );
     wp_register_style( 'void-grid-main', plugins_url ( '/assets/css/main.css', VOID_ELEMENTS_FILE_ ),false, VOID_GRID_VERSION,'all');
@@ -133,7 +132,6 @@ function void_elementor_post_grid_css_load(){
 add_action( 'elementor/frontend/before_enqueue_styles', 'void_elementor_post_grid_css_load');
 
 // add plugin activation time
-
 function void_grid_activation_time(){
     add_action( 'wp_loaded', 'void_grid_wp_load_action' );
 }
@@ -144,7 +142,7 @@ register_activation_hook( __FILE__, 'void_grid_activation_time' );
  * action after wp load function
  *
  * @return void
- * @since 1.1
+ * @since 2.1
  */
 function void_grid_wp_load_action(){
 	update_option('void_grid_active_info', [

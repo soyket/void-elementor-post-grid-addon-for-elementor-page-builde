@@ -9,16 +9,23 @@
 global $col_width, $display_type, $is_filter;
 global $post;
 
+// get all taxonomy by post type
 $taxonomies = get_post_taxonomies($post);
 $terms_id = '[';
+// loop for taxonomies for a post type
 foreach($taxonomies as $t_k => $t_v){
+	// get all terms by post id from taxonomy
 	$terms = get_the_terms( $post->ID , $t_v );
 	$terms = is_array($terms)? $terms: [];
+	// loop for all terms for this post
 	foreach($terms as $term){
+		// process terms id for shuffle
 		$terms_id .= '"'.$term->term_id.'",';
 	}
 }
+// remove last comma from processed terms id
 $terms_id = rtrim($terms_id, ',');
+// close bracket
 $terms_id .= ']';
 
 ?>

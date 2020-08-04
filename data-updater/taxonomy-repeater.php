@@ -3,7 +3,7 @@
  * taxonomy data updater call function
  *
  * @return void
- * @since 1.1
+ * @since 2.1
  */
 function void_grid_data_update_taxonomy_repeater(){
 
@@ -42,7 +42,7 @@ function void_grid_data_update_taxonomy_repeater(){
  * taxonomy data updater by id function
  *
  * @return void
- * @since 1.1
+ * @since 2.1
  * @param int $id
  */
 function void_grid_data_taxonomy_update($id){
@@ -213,6 +213,7 @@ function void_grid_data_taxonomy_update($id){
             }
         }
 
+        // assign data to the the elementor settings
         $elementor_db_setting[$key] = $value;
         
     }

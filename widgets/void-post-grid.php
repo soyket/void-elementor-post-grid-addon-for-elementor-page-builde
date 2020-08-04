@@ -734,7 +734,6 @@ class Void_Post_Grid extends Widget_Base {
 
 	}
 
-
 	protected function render() {
         //to show on the fontend 
         $settings = $this->get_settings();
@@ -811,7 +810,7 @@ class Void_Post_Grid extends Widget_Base {
             $tax_query = '';
         }
 
-        //var_dump($all_terms);
+        // process unique terms according to and, or relation for filtering
         $unique_terms = [];
         if(count($all_terms) > 1){
             for( $i=0; $i < count($all_terms); $i++){
@@ -827,7 +826,6 @@ class Void_Post_Grid extends Widget_Base {
         }else{
             $unique_terms = isset($all_terms[0])? $all_terms[0]: [];
         }
-        //var_dump($unique_terms);
 
         $meta_query = [];
 
@@ -855,7 +853,9 @@ class Void_Post_Grid extends Widget_Base {
     
         $count = 0;         
 
+        // calculate column width by post per row 
         $col_width = ( ($posts_per_row != '') ? (12 / $posts_per_row): 12 );
+        // assign column number by post per row
         $col_no = ( ($posts_per_row != '') ? $posts_per_row : 1 );
     
         $templates = new \Void_Template_Loader;
@@ -893,11 +893,13 @@ class Void_Post_Grid extends Widget_Base {
         echo'<div class="void-elementor-post-grid-wrapper">';
             ?>
             <div class="void-Container <?php echo esc_attr($image_style); ?>">
+            <!-- turn on filter section if it's on in settings. this section needs extra markup -->
             <?php if($is_filter == 'true' && !in_array($display_type, ['first-full-post-grid-1', 'first-full-post-list-1'])): ?>
                 <div class="shuffle-wrapper">
                     <div class="void-row">
                         <div class="void-col-md-12">
                             <div class="btn-group btn-group-toggle void-elementor-post-grid-shuffle-btn" data-toggle="buttons">
+                            <!-- all filter show according to the settings -->
                                 <?php if($is_filter == 'true' && $is_all_filter == 'true') : ?>
                                     <label class="btn active">
                                         <input class="void-shuffle-all-filter" type="radio" name="vepg-shuffle-filter" value="all" checked="checked" />All
@@ -906,6 +908,7 @@ class Void_Post_Grid extends Widget_Base {
                                 <?php foreach($unique_terms as $k => $v) :
                                     $term = get_term($v);
                                 ?>
+                                <!-- show all terms with filter button -->
                                     <label class="btn <?php echo esc_attr((!$is_all_filter && $k==0)? 'active': ''); ?>">
                                         <input type="radio" name="vepg-shuffle-filter" value="<?php echo esc_attr($term->term_id); ?>" <?php echo esc_attr((!$is_all_filter && $k==0)? 'checked="checked"': ''); ?> /><?php echo esc_html($term->name); ?>
                                     </label>
@@ -913,12 +916,15 @@ class Void_Post_Grid extends Widget_Base {
                             </div>
                         </div>
                     </div>
-                    <!-- shuffle div start -->
+                    <!-- shuffle div start. if filter is on -->
                     <div class="shuffle-box void-elementor-post-grid-<?php echo esc_attr($display_type); ?>">
             <?php else: ?>
+            <!-- only this div will show if there was no filter -->
                 <div class="void-row">
             <?php endif;
+            // archive page conditon for using wp default query.
                 if(is_archive()){
+                    // wp default query
                     if(have_posts()):
                         while ( have_posts() ) : the_post();
                         $count++;
@@ -926,10 +932,12 @@ class Void_Post_Grid extends Widget_Base {
                 
                         endwhile; // End of posts loop found posts
                             if($is_filter == 'true' && !in_array($display_type, ['first-full-post-grid-1', 'first-full-post-list-1'])): ?>
+                            <!-- filter section closing divs -->
                                 </div>
                             <div class="void-col-md-<?php echo esc_attr( $col_width );?> filter-sizer"></div>
                         </div>
                         <?php else: ?>
+                        <!-- only this div will be closed if there is no filter -->
                         </div>
                         <?php endif;
                         if($pagination_yes==1) : 
@@ -961,7 +969,7 @@ class Void_Post_Grid extends Widget_Base {
                         $templates->get_template_part( 'content', 'none' );
                     endif;
                 }else{
-
+                    // custom query will be work if this is not archive page
                     if ( $grid_query->have_posts() ) : 
                 
                             /* Start the Loop */
@@ -971,10 +979,12 @@ class Void_Post_Grid extends Widget_Base {
                 
                         endwhile; // End of posts loop found posts
                             if($is_filter == 'true' && !in_array($display_type, ['first-full-post-grid-1', 'first-full-post-list-1'])): ?>
+                             <!-- filter section closing divs -->
                             </div>
                         <div class="void-col-md-<?php echo esc_attr( $col_width );?> filter-sizer"></div>
                         </div>
                         <?php else: ?>
+                        <!-- only this div will be closed if there is no filter -->
                         </div>
                         <?php endif;
                         if($pagination_yes==1) :  //Start of pagination condition 

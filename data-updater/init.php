@@ -23,7 +23,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['void_grid_database_updat
  * database updater function
  *
  * @return void
- * @since 1.1
+ * @since 2.1
  */
 function void_grid_data_updated_notice() {
 

@@ -50,6 +50,11 @@ function void_grid_post_type(){
 	return $post_types;
 }
 
+/**
+ * return all taxonomy by post type function
+ *
+ * @since 2.1
+ */
 function void_grid_ajax_process_tax_request() {
 	// first check if data is being sent and that it is the data we want   
    
@@ -71,9 +76,13 @@ function void_grid_ajax_process_tax_request() {
 }
 add_action('wp_ajax_void_grid_ajax_tax', 'void_grid_ajax_process_tax_request');
 
+/**
+ * return all terms by taxonomy function
+ *
+ * @since 2.1
+ */
 function void_grid_ajax_process_terms_request() {
 	// first check if data is being sent and that it is the data we want
-   
 	if( isset( $_POST['postTypeNonce'] ) ){     
 		$nonce = $_POST['postTypeNonce'];
 		if ( ! wp_verify_nonce( $nonce, 'void_grid-post-type-nonce' ) ){

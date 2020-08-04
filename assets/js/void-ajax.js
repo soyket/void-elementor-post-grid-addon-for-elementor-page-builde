@@ -11,16 +11,22 @@ jQuery( function( $ ) {
                 //this is needed to reset the selected taxonomy
                 $('[data-setting="taxonomy_type"]').trigger('change');
             }
+            // take selected post type
             var post_type = $('[data-setting="post_type"]').val() || model.attributes.settings.attributes.post_type || [];
+            // prepare data for ajax request
             var data = {
                 action: 'void_grid_ajax_tax',
                 postTypeNonce: void_grid_ajax.postTypeNonce,
                 post_type: post_type
             };
 
+            // post type check for avaoiding error on empty post type
             if(!$.isEmptyObject(post_type)){
+                // ajax request
                 $.post(void_grid_ajax.ajaxurl, data, function(response) { 
-                    var taxonomy_name = JSON.parse(response);       
+                    // parse json of response data
+                    var taxonomy_name = JSON.parse(response); 
+                    // set taxonomy on repeater tax field      
                     $.each(taxonomy_name,function(){
                         if(this.name == 'post_format'){
                             return;
@@ -62,13 +68,16 @@ jQuery( function( $ ) {
             if( taxonomy_type == null ){
                 return;
             }
+            // prepare data for ajax request
             var data = {
                 action: 'void_grid_ajax_terms',
                 postTypeNonce : void_grid_ajax.postTypeNonce,
                 taxonomy_type: taxonomy_type
             };      
+            // ajax request
             $.post(void_grid_ajax.ajaxurl, data, function(response) {    
-                var terms = JSON.parse(response);                 
+                var terms = JSON.parse(response);
+                // set terms on repeater term field                 
                 $.each( terms,function( idx, value ){                    
                     onload.closest('.elementor-repeater-row-controls').find('[data-setting="terms"]').append('<option value="'+this.id+'">'+this.name+'</option>');
                 });
@@ -83,7 +92,7 @@ jQuery( function( $ ) {
         }//void_grid_terms()
 
         //when moving from Advanced tab to content model variable is null so to pass it's data
-        function pass_around_model(panel,model,view){
+        function void_grid_data_pass_around_model(panel,model,view){
             void_grid_get_taxonomy();
         }
 
@@ -108,12 +117,12 @@ jQuery( function( $ ) {
         });
         //this ensures the data remains the same even after switching back from advanced tab to content tab
         $( '.elementor-tab-control-content a' ).on( 'click',function(event){
-            pass_around_model( panel,model,view );
+            void_grid_data_pass_around_model( panel,model,view );
         });
-
+        // when moving from another control section keep selected data
         $('.elementor-controls-stack').on('mouseenter', function() {
             $(".elementor-control-section_content").on("click", function (event) {
-                pass_around_model( panel,model,view );
+                void_grid_data_pass_around_model( panel,model,view );
             });
         });
 
