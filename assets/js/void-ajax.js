@@ -51,6 +51,7 @@ jQuery( function( $ ) {
 
         //function to get terms based on taxonomy
         function void_grid_terms( onload = true ){
+
             //only trigger change to reset selected terms option when taxonomy is actively changed
             if( event.type == 'change' ){
                 $('[data-setting="terms"]').trigger('change');
@@ -87,7 +88,7 @@ jQuery( function( $ ) {
                         $(this).val( model.attributes.settings.attributes.tax_fields.models[index].attributes.terms);
                     });
                 }        
-            });  
+            }); 
 
         }//void_grid_terms()
 
@@ -111,19 +112,27 @@ jQuery( function( $ ) {
             $('[data-setting="terms"]')[0].selectedIndex = -1;
             return true;
         });
+
         //this ensures that events are binded to the new repeater
         $('#elementor-controls').on( 'click', '.elementor-control-tax_fields .elementor-repeater-add', function( event ){
-           $( '[data-setting="post_type"]' ).trigger( 'change' );
+            $( '[data-setting="post_type"]' ).trigger( 'change' );
         });
+
         //this ensures the data remains the same even after switching back from advanced tab to content tab
-        $( '.elementor-tab-control-content a' ).on( 'click',function(event){
-            void_grid_data_pass_around_model( panel,model,view );
-        });
-        // when moving from another control section keep selected data
-        $('.elementor-controls-stack').on('mouseenter', function() {
+        $(".elementor-panel").mouseenter(function(){
+
+            $(".elementor-tab-control-content").mouseenter(function(){
+                
+                $( '.elementor-tab-control-content a' ).on( 'click',function(event){
+                    void_grid_data_pass_around_model( panel,model,view );
+                });
+            });
+
+            // fix datalose after switching control section
             $(".elementor-control-section_content").on("click", function (event) {
                 void_grid_data_pass_around_model( panel,model,view );
             });
+            
         });
 
     });//end .addAction
