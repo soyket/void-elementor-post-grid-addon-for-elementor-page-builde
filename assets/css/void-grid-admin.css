@@ -20,24 +20,24 @@
 }
 
 /* notice css start */
-.void-query-message-inner {
+.void-grid-message-inner {
     display: flex;
     -webkit-box-align: center;
     align-items: center;
 }
-.void-query-message-icon,
-.void-query-message-icon > img{
+.void-grid-message-icon,
+.void-grid-message-icon > img{
 	height: 50px;
 	width: 50px;
 }
-.void-query-message-content{
+.void-grid-message-content{
 	padding: 0 20px;
 }
-.void-query-message-content p{
+.void-grid-message-content p{
 	padding: 0;
     margin: 0;
 }
-.void-query-message-action{
+.void-grid-message-action{
 	text-align: center;
     display: flex;
     -webkit-box-orient: vertical;
@@ -45,7 +45,7 @@
     flex-direction: column;
     margin-left: auto;
 }
-.void-query-message-action .void-query-button{
+.void-grid-message-action .void-grid-button{
 	background-color: #d30c5c;
     color: #fff;
     border-color: #7c1337;

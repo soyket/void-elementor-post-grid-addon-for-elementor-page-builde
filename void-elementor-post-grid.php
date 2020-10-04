@@ -78,16 +78,16 @@ function void_grid_data_update_notice() {
 		?>
 		<div class="notice notice-error">
 			<?php echo sprintf( 
-				__( '<div class="void-query-message-inner">
-						<div class="void-query-message-icon">
-							<img class="void-query-notice-icon" src="%s" alt="Void post grid builder logo">
+				__( '<div class="void-grid-message-inner">
+						<div class="void-grid-message-icon">
+							<img class="void-grid-notice-icon" src="%s" alt="Void post grid builder logo">
 						</div>
-						<div class="void-query-message-content">
+						<div class="void-grid-message-content">
 							<strong>Void post grid - Requires Database update.</strong>
 							<p>Please Press Update now button to update your database for the plugin. We suggest you take a full backup of your site or database before you proceed.</p>
 						</div>
-						<div class="void-query-message-action">
-							<a class="void-query-button" href="%s">Update Now</a>
+						<div class="void-grid-message-action">
+							<a class="void-grid-button" href="%s">Update Now</a>
 						</div>
 					</div>'
 				),
