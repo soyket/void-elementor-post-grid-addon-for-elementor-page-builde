@@ -4,6 +4,8 @@ namespace voidgrid\Widgets;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Image_Size;
+use Elementor\Group_Control_Typography;
+use Elementor\Core\Schemes\Typography;
 use Elementor\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -456,12 +458,10 @@ class Void_Post_Grid extends Widget_Base {
         $this->end_controls_section();
 
 
-
-
         $this->start_controls_section(
-            'section_style_grid',
+            'section_style_grid_title',
             [
-                'label' => esc_html__( 'Style', 'void' ),
+                'label' => esc_html__( 'Title', 'void' ),
                 'tab' => Controls_Manager::TAB_STYLE,
             ]
         );
@@ -507,6 +507,24 @@ class Void_Post_Grid extends Widget_Base {
             ]
         );
 
+        $this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'title_typography',
+				'label' => __( 'Typography', 'void' ),
+                'scheme' => Typography::TYPOGRAPHY_1,
+                'fields_options' => [
+                    'typography' => [
+                        'default' => 'yes'
+                    ],
+                    'font_weight' => [
+                        'default' => '300',
+                    ],
+                ],
+				'selector' => '{{WRAPPER}} .entry-title',
+			]
+		);
+
         $this->add_responsive_control(
             'title_color',
             [
@@ -525,6 +543,19 @@ class Void_Post_Grid extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .entry-title a:hover' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_style_grid_meta',
+            [
+                'label' => esc_html__( 'Meta', 'void' ),
+                'tab' => Controls_Manager::TAB_STYLE,
+                'condition' => [
+                    'display_type!' => ['list-1', 'minimal'],
                 ],
             ]
         );
@@ -556,6 +587,16 @@ class Void_Post_Grid extends Widget_Base {
             ]
         );
 
+        $this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'meta_typography',
+				'label' => __( 'Typography', 'void' ),
+				'scheme' => Typography::TYPOGRAPHY_1,
+				'{{WRAPPER}} .entry-meta span a',
+			]
+		);
+
         $this->add_responsive_control(
             'meta_color',
             [
@@ -585,6 +626,19 @@ class Void_Post_Grid extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .entry-meta i' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+        
+        $this->start_controls_section(
+            'section_style_grid_excerpt',
+            [
+                'label' => esc_html__( 'Excerpt', 'void' ),
+                'tab' => Controls_Manager::TAB_STYLE,
+                'condition' => [
+                    'display_type!' => ['grid-1'],
                 ],
             ]
         );
@@ -630,6 +684,16 @@ class Void_Post_Grid extends Widget_Base {
             ]
         );
 
+        $this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'excerpt_typography',
+				'label' => __( 'Typography', 'void' ),
+				'scheme' => Typography::TYPOGRAPHY_1,
+				'{{WRAPPER}} .blog-excerpt p',
+			]
+		);
+
         $this->add_responsive_control(
             'exceprt_color',
             [
@@ -672,10 +736,56 @@ class Void_Post_Grid extends Widget_Base {
             ]
         );
 
+        $this->end_controls_section();
+        
+        $this->start_controls_section(
+            'section_style_grid_pagination',
+            [
+                'label' => esc_html__( 'Pagination', 'void' ),
+                'tab' => Controls_Manager::TAB_STYLE,
+                'condition' => [
+                    'posts!' => -1,
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'pagi_font_size',
+            [
+                'label' => esc_html__( 'Pagination Size', 'void' ),
+                'type' => Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 1000,
+                        'step' => 1,
+                    ],
+                    '%' => [
+                        'min' => 0,
+                        'max' => 100,
+                    ],
+                ],
+                'size_units' => [ 'px', '%' ],
+                'selectors' => [
+                    '{{WRAPPER}} .void-grid-nav, {{WRAPPER}} .void-grid-nav a' => 'font-size: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'pagination_typography',
+				'label' => __( 'Typography', 'void' ),
+				'scheme' => Typography::TYPOGRAPHY_1,
+				'{{WRAPPER}} .void-grid-nav, {{WRAPPER}} .void-grid-nav a',
+			]
+		);
+
         $this->add_responsive_control(
             'pagination_align',
             [
-                'label' => __( 'Pagination Alignment', 'void' ),
+                'label' => __( 'Alignment', 'void' ),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [
@@ -699,34 +809,7 @@ class Void_Post_Grid extends Widget_Base {
                 'selectors' => [
                     '{{WRAPPER}} .void-grid-nav' => 'text-align: {{VALUE}};',
                 ],
-                'condition' => [
-                    'posts!' => -1,
-                ]
-            ]
-        );
-        $this->add_responsive_control(
-            'pagi_font_size',
-            [
-                'label' => esc_html__( 'Pagination Size', 'void' ),
-                'type' => Controls_Manager::SLIDER,
-                'range' => [
-                    'px' => [
-                        'min' => 0,
-                        'max' => 1000,
-                        'step' => 1,
-                    ],
-                    '%' => [
-                        'min' => 0,
-                        'max' => 100,
-                    ],
-                ],
-                'size_units' => [ 'px', '%' ],
-                'selectors' => [
-                    '{{WRAPPER}} .void-grid-nav, {{WRAPPER}} .void-grid-nav a' => 'font-size: {{SIZE}}{{UNIT}};',
-                ],
-                'condition' => [
-                    'posts!' => -1,
-                ]
+
             ]
         );
 
