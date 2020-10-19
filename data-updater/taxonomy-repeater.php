@@ -71,7 +71,7 @@ function void_grid_data_taxonomy_update($id){
                                 // property check
                                 if(property_exists($settings, 'taxonomy_type') || property_exists($settings, 'terms')){
                     
-                                    $display_type = isset($settings->display_type)? $settings->display_type: '';
+                                    $display_type = isset($settings->display_type)? $settings->display_type: '1';
                                     $image_style = isset($settings->image_style)? $settings->image_style: '';
 
                                     // display type handler will be remove after data updater
@@ -119,7 +119,8 @@ function void_grid_data_taxonomy_update($id){
                                         'compare' => 'LIKE'
                                     ];
 
-                                    $settings->display_type = $display_type;
+                                    // assign data in display type and image style
+                                    $settings->{"display_type"} = $display_type;
                                     $settings->image_style = $image_style;
                     
                                     // add new property in elementor setting for migration
@@ -146,7 +147,7 @@ function void_grid_data_taxonomy_update($id){
                     // property check
                     if(property_exists($settings, 'taxonomy_type') || property_exists($settings, 'terms')){
         
-                        $display_type = isset($settings->display_type)? $settings->display_type: '';
+                        $display_type = isset($settings->display_type)? $settings->display_type: '1';
                         $image_style = isset($settings->image_style)? $settings->image_style: '';
 
                         // display type data converter
@@ -194,11 +195,12 @@ function void_grid_data_taxonomy_update($id){
                         ];
 
                         // assign data in display type and image style
-                        $settings->display_type = $display_type;
+                        $settings->{"display_type"} = $display_type;
                         $settings->image_style = $image_style;
         
                         // add new property in elementor setting for migration
                         $settings->{"tax_fields"}[] = (object)$convert_data_new_format;
+                        //$settings->{"display_type"} = 'grid-1';
                         $settings->{"tax_fields_relation"} = '';
                         
                         // clear previous used data
