@@ -826,7 +826,7 @@ class Void_Post_Grid extends Widget_Base {
         $post_type        = isset($settings['post_type'])? $settings['post_type']: '';
         $filter_thumbnail = isset($settings['filter_thumbnail'])? $settings['filter_thumbnail']: '';
         $cat_exclude      = isset($settings['cat_exclude'])? $settings['cat_exclude']: ''; // actually include or exclude both
-        $display_type     = isset($settings['display_type'])? $settings['display_type']: 'grid-1';   
+        $display_type     = isset($settings['display_type'])? (($settings['display_type'] != '')? $settings['display_type']: 'grid-1'): 'grid-1';   
         $posts            = isset($settings['posts'])? $settings['posts']: '';
         $posts_per_row    = isset($settings['posts_per_row'])? $settings['posts_per_row']: '';      
         $image_style      = isset($settings['image_style'])? $settings['image_style']: 'standard';
