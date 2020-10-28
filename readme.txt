@@ -74,7 +74,7 @@ Our Void Elementor Post Grid adds a new section in the elementor live page build
 
 
 == Changelog ==
-= 2.1.3 =
+= 2.1.4 =
 * Fix: Improve database migration. solve the maximum issue regarding this.
 = 2.1.3 =
 * Added: Typography controller for title, excerpt, meta, etc.
