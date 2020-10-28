@@ -3,7 +3,7 @@ Contributors: voidthemes,voidcoders
 Tags: page-builder, elementor, grid-builder, list-post, post-grid
 Requires at least: 4.4
 Tested up to: 5.5.1
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,8 @@ Our Void Elementor Post Grid adds a new section in the elementor live page build
 
 
 == Changelog ==
+= 2.1.3 =
+* Fix: Improve database migration. solve the maximum issue regarding this.
 = 2.1.3 =
 * Added: Typography controller for title, excerpt, meta, etc.
 * Fix: Data updater widget vanish issue solved.
