@@ -11,7 +11,7 @@ global $blog_style;
 ?>
 	
 
-	<header class="entry-header publishify-overlay <?php echo $blog_style.' stack-bg-'.get_the_id(); ?>">		
+	<header class="entry-header publishify-overlay <?php echo esc_attr($blog_style.' stack-bg-'.get_the_id()); ?>">		
 		<div class="post-info">
 		<?php
 				if ( 'post' === get_post_type() ) : ?>

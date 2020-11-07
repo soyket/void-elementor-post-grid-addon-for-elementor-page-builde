@@ -198,7 +198,6 @@ class Void_Post_Grid extends Widget_Base {
                 'type' => Controls_Manager::TEXT,
                 'options' => '',
                 'label_block' => true,
-                 
                 'condition' => [
                     'meta_value!' =>'',
                 ] 
@@ -341,11 +340,11 @@ class Void_Post_Grid extends Widget_Base {
                 'label' => esc_html__( 'Choose your desired style', 'void' ),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'grid-1' => 'Grid style', 
-                    'list-1' => 'List style', 
-                    'first-full-post-grid-1' => '1st Full Post then Grid',
-                    'first-full-post-list-1' => '1st Full Post then List',
-                    'minimal' => 'Minimal Grid'
+                    'grid-1' => esc_html__( 'Grid style', 'void' ), 
+                    'list-1' => esc_html__( 'List style', 'void' ), 
+                    'first-full-post-grid-1' => esc_html__( '1st Full Post then Grid', 'void' ),
+                    'first-full-post-list-1' => esc_html__( '1st Full Post then List', 'void' ),
+                    'minimal' => esc_html__( 'Minimal Grid', 'void' )
                 ],
                 'default' => 'grid-1',
                 'label_block' => true,
@@ -361,11 +360,11 @@ class Void_Post_Grid extends Widget_Base {
                     'display_type' => ['grid-1', 'grid-2', 'minimal'],
                 ],
                 'options' => [
-                    '1' => '1',
-                    '2' => '2',
-                    '3' => '3',
-                    '4' => '4',
-                    '6' => '6',
+                    '1' => esc_html__( '1', 'void' ),
+                    '2' => esc_html__( '2', 'void' ),
+                    '3' => esc_html__( '3', 'void' ),
+                    '4' => esc_html__( '4', 'void' ),
+                    '6' => esc_html__( '6', 'void' ),
                 ],
                 'default' => '2',
             ]
@@ -405,9 +404,9 @@ class Void_Post_Grid extends Widget_Base {
                 'label' => esc_html__('Featured Image Style', 'void'),
                 'type'  => Controls_Manager::SELECT2,
                 'options' => [
-                    'standard' => 'Standard',
-                    'top-left' => 'left top rounded',
-                    'top-right' => 'left bottom rounded'
+                    'standard' => esc_html__( 'Standard', 'void' ),
+                    'top-left' => esc_html__( 'left top rounded', 'void' ),
+                    'top-right' => esc_html__( 'left bottom rounded', 'void' )
                 ],
                 'default'   => 'standard',
                 'condition' => [
@@ -973,7 +972,7 @@ class Void_Post_Grid extends Widget_Base {
         global $post_count;
         $post_count = $posts;
 
-        echo'<div class="void-elementor-post-grid-wrapper">';
+        echo esc_html('<div class="void-elementor-post-grid-wrapper">');
             ?>
             <div class="void-Container <?php echo esc_attr($image_style); ?>">
             <!-- turn on filter section if it's on in settings. this section needs extra markup -->
@@ -985,7 +984,7 @@ class Void_Post_Grid extends Widget_Base {
                             <!-- all filter show according to the settings -->
                                 <?php if($is_filter == 'true' && $is_all_filter == 'true') : ?>
                                     <label class="btn active">
-                                        <input class="void-shuffle-all-filter" type="radio" name="vepg-shuffle-filter" value="all" checked="checked" />All
+                                        <input class="void-shuffle-all-filter" type="radio" name="vepg-shuffle-filter" value="all" checked="checked" /><?php esc_html_e('All', 'void'); ?>
                                     </label>
                                 <?php endif; ?>
                                 <?php foreach($unique_terms as $k => $v) :
@@ -1043,7 +1042,7 @@ class Void_Post_Grid extends Widget_Base {
                             $pagination = paginate_links($paginate_args); ?>
                             <div class="col-md-12">
                                 <nav class='pagination wp-caption void-grid-nav'> 
-                                <?php echo $pagination; ?>
+                                <?php echo esc_html($pagination); ?>
                                 </nav>
                             </div>
                         <?php
@@ -1093,7 +1092,7 @@ class Void_Post_Grid extends Widget_Base {
                             $pagination = paginate_links($paginate_args); ?>
                             <div class="col-md-12">
                                 <nav class='pagination wp-caption void-grid-nav'> 
-                                <?php echo $pagination; ?>
+                                <?php echo esc_html($pagination); ?>
                                 </nav>
                             </div>
                         <?php endif; //end of pagination condition ?>
@@ -1111,7 +1110,7 @@ class Void_Post_Grid extends Widget_Base {
             
             <?php
             wp_reset_postdata();    
-		echo'</div>';
+		echo '</div>';
 	}
 
 }

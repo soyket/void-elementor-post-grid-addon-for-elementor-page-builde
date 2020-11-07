@@ -25,15 +25,15 @@ function voidgrid_get_flat_icons() {
 
 function voidgrid_post_orderby_options(){
     $orderby = array(
-        'ID' => 'Post Id',
-        'author' => 'Post Author',
-        'title' => 'Title',
-        'date' => 'Date',
-        'modified' => 'Last Modified Date',
-        'parent' => 'Parent Id',
-        'rand' => 'Random',
-        'comment_count' => 'Comment Count',
-        'menu_order' => 'Menu Order',
+        'ID' => esc_html__('Post Id', 'void'),
+        'author' => esc_html__('Post Author', 'void'),
+        'title' => esc_html__('Title', 'void'),
+        'date' => esc_html__('Date', 'void'),
+        'modified' => esc_html__('Last Modified Date', 'void'),
+        'parent' => esc_html__('Parent Id', 'void'),
+        'rand' => esc_html__('Random', 'void'),
+        'comment_count' => esc_html__('Comment Count', 'void'),
+        'menu_order' => esc_html__('Menu Order', 'void'),
     );
 
     return $orderby;
