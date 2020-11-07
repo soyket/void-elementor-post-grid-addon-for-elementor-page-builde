@@ -972,7 +972,7 @@ class Void_Post_Grid extends Widget_Base {
         global $post_count;
         $post_count = $posts;
 
-        echo esc_html('<div class="void-elementor-post-grid-wrapper">');
+        echo '<div class="void-elementor-post-grid-wrapper">';
             ?>
             <div class="void-Container <?php echo esc_attr($image_style); ?>">
             <!-- turn on filter section if it's on in settings. this section needs extra markup -->
