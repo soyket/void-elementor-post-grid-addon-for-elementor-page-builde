@@ -1042,7 +1042,7 @@ class Void_Post_Grid extends Widget_Base {
                             $pagination = paginate_links($paginate_args); ?>
                             <div class="col-md-12">
                                 <nav class='pagination wp-caption void-grid-nav'> 
-                                <?php echo esc_html($pagination); ?>
+                                <?php echo $pagination; ?>
                                 </nav>
                             </div>
                         <?php
@@ -1092,7 +1092,7 @@ class Void_Post_Grid extends Widget_Base {
                             $pagination = paginate_links($paginate_args); ?>
                             <div class="col-md-12">
                                 <nav class='pagination wp-caption void-grid-nav'> 
-                                <?php echo esc_html($pagination); ?>
+                                <?php echo $pagination; ?>
                                 </nav>
                             </div>
                         <?php endif; //end of pagination condition ?>
