@@ -11,11 +11,26 @@ if( $_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['void_grid_database_updat
 
     if ( !isset($update_data['taxonomy_repeater']['status']) || $update_data['taxonomy_repeater']['status'] != '1') {
         
-        void_grid_data_update_taxonomy_repeater();
+        $status = void_grid_data_update_taxonomy_repeater();
 
-        delete_option('void_grid_elementor_post_grid_activation_time');
-        // call to show updated notice
-        add_action('admin_notices', 'void_grid_data_updated_notice');
+        if($status){
+
+            $activate_info = [
+                'version' => VOID_GRID_VERSION,
+                'void_grid_activation_time' => strtotime("now"),
+            ];
+            
+            if(is_multisite()){
+                void_grid_delete_admin_options('void_grid_elementor_post_grid_activation_time');
+                void_grid_update_admin_options('void_grid_active_info', $activate_info );
+            }else{
+                delete_option('void_grid_elementor_post_grid_activation_time');
+                update_option('void_grid_active_info', $activate_info );
+            }
+
+            // call to show updated notice
+            add_action('admin_notices', 'void_grid_data_updated_notice');
+        }
     }
 }
 

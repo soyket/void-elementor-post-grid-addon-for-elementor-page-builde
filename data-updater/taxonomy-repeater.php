@@ -13,16 +13,19 @@ function void_grid_data_update_taxonomy_repeater(){
 	$sql = $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE `meta_key` = %s", "_elementor_controls_usage");
 	$control_usage = $wpdb->get_results( $sql , OBJECT );
 
+    $cnt = 0;
 	foreach($control_usage as $key =>$value){
 
         $meta_value = unserialize($value->meta_value);
 
         // void query builder used widget's page condition
 		if(array_key_exists('void-post-grid', $meta_value)){
-            void_grid_data_taxonomy_update($value->post_id);
+            $update_status = void_grid_data_taxonomy_update($value->post_id);
+            if($update_status){
+                $cnt++;
+            }
 		}
     }
-
 
     // update info ready
     $update_info = [
@@ -33,8 +36,10 @@ function void_grid_data_update_taxonomy_repeater(){
         ],
     ];
 
-    // store update info in db
-    update_option('VOID_GRID_DATA_UPDATE', $update_info);
+    if($cnt > 0){
+        // store update info in db
+        return update_option('VOID_GRID_DATA_UPDATE', $update_info);
+    }
     
 }
 
@@ -220,7 +225,7 @@ function void_grid_data_taxonomy_update($id){
     }
 
     // update it on database
-	update_post_meta($id, '_elementor_data', json_encode($elementor_db_setting, JSON_UNESCAPED_UNICODE));
+	return update_post_meta($id, '_elementor_data', json_encode($elementor_db_setting, JSON_UNESCAPED_UNICODE));
 }
 
 ?>

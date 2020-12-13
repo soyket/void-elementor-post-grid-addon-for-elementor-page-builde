@@ -70,9 +70,15 @@ add_action('admin_notices', 'voidgrid_load_elements_notice');
  */
 function void_grid_data_update_notice() {
 
-	$version = get_option('void_grid_active_info');
+	$active_info = get_option('void_grid_active_info');
 	$update_info = get_option('VOID_GRID_DATA_UPDATE');
-	$active_time = get_option('void_grid_elementor_post_grid_activation_time');
+    $active_time = get_option('void_grid_elementor_post_grid_activation_time');
+
+    
+    if(is_multisite()){
+        $active_time = void_grid_get_admin_options('void_grid_elementor_post_grid_activation_time');
+        $active_info = void_grid_get_admin_options('void_grid_active_info');
+    }
 
 	if ( (!isset($update_info['taxonomy_repeater']['status']) || $update_info['taxonomy_repeater']['status'] == '0') && $active_time ) {
 		?>
@@ -142,23 +148,14 @@ add_action( 'elementor/frontend/before_enqueue_styles', 'void_elementor_post_gri
 
 // add plugin activation time
 function void_grid_activation_time(){
-    add_action( 'wp_loaded', 'void_grid_wp_load_action' );
+    $activate_info = [
+        'version' => VOID_GRID_VERSION,
+        'void_grid_activation_time' => strtotime("now"),
+    ];
+    update_option('void_grid_active_info', $activate_info );
 }
 register_activation_hook( __FILE__, 'void_grid_activation_time' );
 
-
-/**
- * action after wp load function
- *
- * @return void
- * @since 2.1
- */
-function void_grid_wp_load_action(){
-	update_option('void_grid_active_info', [
-			'version' => VOID_GRID_VERSION,
-			'void_grid_activation_time' => strtotime("now"),
-		]);
-}
 
 //check if review notice should be shown or not
 

@@ -106,3 +106,38 @@ function void_grid_ajax_process_terms_request() {
 	} 
 }
 add_action('wp_ajax_void_grid_ajax_terms', 'void_grid_ajax_process_terms_request');
+
+function void_grid_get_admin_options($option_name){
+	global $wpdb;
+
+    $local_table_prefix = $wpdb->prefix;
+    $blog_id = get_current_blog_id();
+    $global_table_prefix = str_replace("{$blog_id}_", "", $local_table_prefix);
+
+	$option_value = $wpdb->get_results( $wpdb->prepare("SELECT `option_name` FROM `{$global_table_prefix}options` WHERE `option_name` = '%s'", $option_name));
+	$option_value = maybe_unserialize(isset($option_value[0]->option_name)? $option_value[0]->option_name: false);
+	return $option_value;
+}
+
+function void_grid_update_admin_options($option_name, $option_value){
+	global $wpdb;
+
+    $local_table_prefix = $wpdb->prefix;
+    $blog_id = get_current_blog_id();
+    $global_table_prefix = str_replace("{$blog_id}_", "", $local_table_prefix);
+
+	$return = $wpdb->get_results( $wpdb->prepare("UPDATE `{$global_table_prefix}options` SET `option_value` = '%s' WHERE `option_name` = '%s';", maybe_serialize($option_value), $option_name));
+	return $return;
+}
+
+function void_grid_delete_admin_options($option_name){
+	global $wpdb;
+
+    $local_table_prefix = $wpdb->prefix;
+    $blog_id = get_current_blog_id();
+    $global_table_prefix = str_replace("{$blog_id}_", "", $local_table_prefix);
+
+	$return = $wpdb->get_results( $wpdb->prepare("DELETE FROM `{$global_table_prefix}options`
+	WHERE ((`option_name` = '%s'));", $option_name));
+	return $return;
+}
