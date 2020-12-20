@@ -7,6 +7,8 @@
  * Plugin URI:  https://voidcoders.com/product/post-grid-add-on-for-elementor-free/
  * Author URI:  http://voidcoders.com
  * Text Domain: void
+ * Elementor tested up to: 3.0.14
+ * Elementor Pro tested up to: 3.0.8
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
