@@ -2,18 +2,18 @@
 /**
  * Plugin Name: Void Elementor Post Grid Addon for Elementor Page builder
  * Description: Elementor Post Grid in 5 different style by voidcoders for elementor page builder
- * Version:     2.1.7
+ * Version:     2.1.9
  * Author:      VOID CODERS
  * Plugin URI:  https://voidcoders.com/product/post-grid-add-on-for-elementor-free/
  * Author URI:  http://voidcoders.com
  * Text Domain: void
- * Elementor tested up to: 3.0.14
- * Elementor Pro tested up to: 3.0.8
+ * Elementor tested up to: 3.2.5
+ * Elementor Pro tested up to: 3.3.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-define('VOID_GRID_VERSION', '2.1.7');
+define('VOID_GRID_VERSION', '2.1.9');
 define('VOID_GRID_PLUGIN_URL', trailingslashit(plugin_dir_url( __FILE__ )));
 define('VOID_GRID_PLUGIN_DIR', trailingslashit(plugin_dir_path( __FILE__ )));
 
@@ -35,7 +35,7 @@ function voidgrid_load_elements() {
     }
 
     // Check version required
-    $elementor_version_required = '1.0.0';
+    $elementor_version_required = '2.0.0';
     if ( ! version_compare( ELEMENTOR_VERSION, $elementor_version_required, '>=' ) ) {
         return;
     }

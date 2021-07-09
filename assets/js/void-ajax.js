@@ -119,11 +119,23 @@ jQuery( function( $ ) {
         });
 
         //this ensures the data remains the same even after switching back from advanced tab to content tab
-        $(".elementor-panel").mouseenter(function(){
-
+        var itest = 1;
+        $(".elementor-panel").mouseenter(function(){ 
+            console.log(itest++);
             void_grid_data_pass_around_model( panel,model,view );
+            console.log('Data Passed');
             
         });
+        // $('#elementor-panel-page-editor .elementor-component-tab').on( 'click', '', function(){
+        //     alert('Hello');
+        // });
 
+        $(window).on('load', function(){
+            $('#elementor-panel-content-wrapper').addClass('postGridSettingsTab');
+        });
+        
+        $('#elementor-panel-content-wrapper').on( 'click', '#elementor-panel-page-editor .elementor-component-tab', function(e){
+            alert('Hello');
+        });
     });//end .addAction
 });

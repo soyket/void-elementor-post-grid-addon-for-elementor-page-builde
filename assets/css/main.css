@@ -327,6 +327,18 @@
     padding-bottom: 25px;
     min-height: 766px;
 }
+
+.void-post-grid.void-minimal-grid {
+    text-align: center;
+}
+
+.void-post-grid.void-minimal-grid .post-img {
+    position: relative;
+}
+
+.void-post-grid.void-minimal-grid .post-img img {
+    width: 100%;
+}
 /* -----Grid 2 Style END----- */
 
 /* 

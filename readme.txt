@@ -1,9 +1,9 @@
 === Void Elementor Post Grid Addon for Elementor Page builder ===
 Contributors: voidthemes,voidcoders
-Tags: page-builder, elementor, grid-builder, list-post, post-grid
-Requires at least: 4.4
-Tested up to: 5.6
-Stable tag: 2.1.7
+Tags: page-builder, elementor, grid-builder, list-post, post-grid, addons, elementor addons, elementor widget
+Requires at least: 4.9
+Tested up to: 5.7.2
+Stable tag: 2.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,11 @@ Our Void Elementor Post Grid adds a new section in the elementor live page build
 
 
 == Changelog ==
+= 2.1.9 =
+* Fix: Elementor compatiability added.
+* Fix: Removed un-used php files as reported
+= 2.1.8 =
+* Fix: Elementor compatiability added.
 = 2.1.7 =
 * Fix: Elementor compatiability added.
 = 2.1.6 =
